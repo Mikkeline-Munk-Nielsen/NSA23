@@ -14,6 +14,41 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       ratio: '16:9'
+---
+
+```{r}
+
+pacman:: p_load(dplyr, tidyverse, xaringanthemer,xaringanExtra, haven, paran, knitr, rayshader, av, psych, factoextra, usethis)
+
+
+
+setwd("C:/Users/mmn/ROCKWOOL Foundation Dropbox/Mikkeline Munk Nielsen/Nyere statistiske analysestrategier F23/slides-mmn/NSA23")
+
+#xaringan::inf_mr()
+
+xaringanExtra::use_xaringan_extra(c("tile_view", "tachyons"))
+xaringanExtra::use_panelset()
+
+
+xaringanExtra::use_logo(
+  image_url = "https://designguide.ku.dk/download/co-branding/ku_co_uk_h.jpg",
+  width = "220px",
+  height = "256px",
+)
+
+
+style_mono_light(base_color = "#8B0000")
+
+style_mono_accent(
+  base_color = "#8B0000",
+  header_color = "#8B0000",
+  text_font_size = "1.2rem" 
+)
+
+
+
+```
+
 
 ---
 # Program for i dag
@@ -335,7 +370,7 @@ Lad os prøve at se på et eksempel fra European social survey omkring generalis
 
 # Read dataset (for now as dta file, which Haven can help with)
 
-ESS_DK <- read_dta("C:/Users/mmn/ROCKWOOL Foundation Dropbox/Mikkeline Munk Nielsen/Nyere statistiske analysestrategier F23/slides-mmn/PCA I/ESS6DK.dta")
+ESS_DK <- read_dta("C:/Users/mmn/ROCKWOOL Foundation Dropbox/Mikkeline Munk Nielsen/Nyere statistiske analysestrategier F23/slides-mmn/NSA23/ESS6DK.dta")
 
 ESS_DK <- ESS_DK %>%
   zap_labels() %>% 
