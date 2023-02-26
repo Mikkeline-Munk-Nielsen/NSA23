@@ -1,67 +1,54 @@
-<!DOCTYPE html>
-<html lang="" xml:lang="">
-  <head>
-    <title>PCA I</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="v. Mikkeline Munk Nielsen" />
-    <script src="libs/header-attrs-2.19/header-attrs.js"></script>
-    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
-    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
-    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="libs/panelset-0.2.6/panelset.js"></script>
-    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
-  </head>
-  <body>
-    <textarea id="source">
-class: center, middle, inverse, title-slide
-
-.title[
-# PCA I
-]
-.subtitle[
-## Nyere statistiske analysestrategier F23
-]
-.author[
-### v. Mikkeline Munk Nielsen
-]
-
+---
+title: "PCA I"
+subtitle: "Nyere statistiske analysestrategier F23"
+author: "v. Mikkeline Munk Nielsen"
+institute: ""
+#date: "2016/12/12 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightLanguage: r
+      highlightStyle: zenburn
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+      self_contained: TRUE
 ---
 
+```{r echo=FALSE}
 
-<div>
-<style type="text/css">.xaringan-extra-logo {
-width: 220px;
-height: 256px;
-z-index: 0;
-background-image: url(https://designguide.ku.dk/download/co-branding/ku_co_uk_h.jpg);
-background-size: contain;
-background-repeat: no-repeat;
-position: absolute;
-top:1em;right:1em;
-}
-</style>
-<script>(function () {
-  let tries = 0
-  function addLogo () {
-    if (typeof slideshow === 'undefined') {
-      tries += 1
-      if (tries < 10) {
-        setTimeout(addLogo, 100)
-      }
-    } else {
-      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
-        .forEach(function (slide) {
-          const logo = document.createElement('div')
-          logo.classList = 'xaringan-extra-logo'
-          logo.href = null
-          slide.appendChild(logo)
-        })
-    }
-  }
-  document.addEventListener('DOMContentLoaded', addLogo)
-})()</script>
-</div>
+pacman:: p_load(dplyr, tidyverse, xaringanthemer,xaringanExtra, haven, paran, knitr, rayshader, av, psych, factoextra, usethis)
+
+
+
+setwd("C:/Users/mmn/ROCKWOOL Foundation Dropbox/Mikkeline Munk Nielsen/Nyere statistiske analysestrategier F23/slides-mmn/NSA23")
+
+#xaringan::inf_mr()
+
+xaringanExtra::use_xaringan_extra(c("tile_view", "tachyons"))
+xaringanExtra::use_panelset()
+
+
+xaringanExtra::use_logo(
+  image_url = "https://designguide.ku.dk/download/co-branding/ku_co_uk_h.jpg",
+  width = "220px",
+  height = "256px",
+)
+
+
+style_mono_light(base_color = "#8B0000")
+
+style_mono_accent(
+  base_color = "#8B0000",
+  header_color = "#8B0000",
+  text_font_size = "1.2rem" 
+)
+
+
+
+```
 
 # PCA forløbet
 
@@ -105,14 +92,14 @@ Faktoranalyser er dog en bred gren med mange teknikker - også konfirmative frem
 
 Vi starter med en bred introduktion til faktoranalysen i sin helhed.
 
-.pull-right[![](https://media.istockphoto.com/id/1432095439/tr/vekt%C3%B6r/grunge-red-disclaimer-word-rubber-seal-stamp-on-white-background.jpg?s=612x612&amp;w=0&amp;k=20&amp;c=MOmKB4uopo339Fsq4xzDxg46-a81YwY8iKUbNoUoWCc=)]
+.pull-right[![](https://media.istockphoto.com/id/1432095439/tr/vekt%C3%B6r/grunge-red-disclaimer-word-rubber-seal-stamp-on-white-background.jpg?s=612x612&w=0&k=20&c=MOmKB4uopo339Fsq4xzDxg46-a81YwY8iKUbNoUoWCc=)]
 ---
 # Introduction til faktoranalyse og PCA
 
 .pull-left[
 Faktoranalyse referer til en række af teknikker, der forsøger at **reducere variansen** i en korrelationsmatrice med mange (relaterede) variable til få grundlæggende variable
 
-Wikipedia’s definition af faktoranalyse:&lt;break&gt;
+Wikipedia’s definition af faktoranalyse:<break>
 
 *”Factor analysis is a statistical method used to describe variability among observed, correlated variables in terms of a potentially lower number of unobserved variables called factors.“ *
 ]
@@ -124,7 +111,7 @@ Wikipedia’s definition af faktoranalyse:&lt;break&gt;
 
 .pull-left[
 **LCA** gruppérer **personer** i nogle få grundlæggende *typer/klasser* 
-&lt;break&gt;
+<break>
 ![](https://www.umass.edu/family/sites/default/files/events/latent_class_analysis_image.png)
 ]
 
@@ -132,7 +119,7 @@ Wikipedia’s definition af faktoranalyse:&lt;break&gt;
 .pull-right[
 **PCA** grupperer **variable** der måler det samme og omgrupperer dem til færre *nye variable*, der opsummerer variationen på tværs af de gamle variable
 
-![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR41fy74OEaqmKaGalRK5yIihM9hFBfIUv27A&amp;usqp=CAU)
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR41fy74OEaqmKaGalRK5yIihM9hFBfIUv27A&usqp=CAU)
 ]
 
 Faktoranalyse handler altså om at gruppere variable på baggrund af, om de i virkeligheden "måler det samme" og derfor "ligner hinanden".
@@ -153,9 +140,9 @@ I faktoranalyse termer: hvilke konstrukter eller dimensioner står bag korrelati
 ]
 .pull-right[
 
-&lt;img src="https://o.quizlet.com/VIcrsTFAzl0uJKh4xSXcbQ.png"
+<img src="https://o.quizlet.com/VIcrsTFAzl0uJKh4xSXcbQ.png"
      width="500px" height="500px"
-     style="position:absolute; right:60px; top:110px;"&gt;
+     style="position:absolute; right:60px; top:110px;">
 ]
 
 *(Kline 1994:7)*
@@ -193,11 +180,11 @@ Man bruger blandt andet faktoranalysen til skalakonstruktion!
 
 En skala er normalt defineret ved at være en (vægtet) sum af variable, der måler det samme underliggende koncept.Skalaen skulle gerne måle et underliggende fænomen eller teoretisk begreb, fx en grundholdning.
 
-&lt;break&gt;
+<break>
 
 Det første vi kunne gøre var at kombinere de fem spørgsmål til en simpel sumskala:
 
-`$$S = I_i + I_2+I_3+I_4+I_5$$`
+$$S = I_i + I_2+I_3+I_4+I_5$$
 Her antager vi, at hver variabel bidrager lige meget til det underliggende fænomen, som vi forsøger at måle.
 ---
 # Skalakonstruktion
@@ -206,7 +193,7 @@ Alternativt kan vi begive os ud i at vægte spørgsmålene alt efter, hvilke sp�
 
 Eksempel på en *vægtet* sumskala med 5 items:
 
-`$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$`
+$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$
 ---
 
 # Skalakonstruktion
@@ -215,7 +202,7 @@ Alternativt kan vi begive os ud i at vægte spørgsmålene alt efter, hvilke sp�
 
 Eksempel på en *vægtet* sumskala med 5 items:
 
-`$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$`
+$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$
 
 **Summeøvelse i 2 min med sidemanden:** hvad er intuitionen i en vægtet sumskala? Hvad siger vægtene?
 
@@ -226,7 +213,7 @@ Alternativt kan vi begive os ud i at vægte spørgsmålene alt efter, hvilke sp�
 
 Eksempel på en *vægtet* sumskala med 5 items:
 
-`$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$`
+$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$
 
 **Summeøvelse i 2 min med sidemanden:** hvad er intuitionen i en vægtet sumskala? Hvad siger vægtene?
 
@@ -252,15 +239,15 @@ Faktoranalyse kan faktisk forstås ud fra linear regression.
 
 .pull-left[
 "Modellen" er:
-`$$I_1=\beta_1F+\epsilon_1$$`
-`$$I_2=\beta_2F+\epsilon_2$$`
-`$$I_3=\beta_3F+\epsilon_3$$`
+$$I_1=\beta_1F+\epsilon_1$$
+$$I_2=\beta_2F+\epsilon_2$$
+$$I_3=\beta_3F+\epsilon_3$$
 ]
 .pull-right[
 Beta-koefficienterne siger noget om, hvor *stærkt* F påvirker responser på indikatorerne.
 
 Betinget uafhængighed betyder, at:
-`$$corr(\epsilon_1, \epsilon_2, \epsilon_3)=0$$`
+$$corr(\epsilon_1, \epsilon_2, \epsilon_3)=0$$
 ]
 
 ---
@@ -328,7 +315,7 @@ PCA kan med andre ord reducere dimensionaliteten i vores data!
 ]
 
 .pull-right[
-![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR41fy74OEaqmKaGalRK5yIihM9hFBfIUv27A&amp;usqp=CAU)
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR41fy74OEaqmKaGalRK5yIihM9hFBfIUv27A&usqp=CAU)
 ]
 
 ---
@@ -344,7 +331,7 @@ CFM baserer sig på samme statistiske teknik som PCA, men antager, at de latente
 
 - Selvom distinktionen er vigtig at forestå, fokuserer kurset på PCA. PCA er mere udbredt og nemmere at forstå (spoiler: i praksis vil de ofte producere samme resultat). Vi berører CFM i vores fjerde session.
 
-&gt; Forskellen på PCA og CFM er godt beskrevet i pensum (Kline 1994: kap. 4; Pett et al. 2003:102ff).
+> Forskellen på PCA og CFM er godt beskrevet i pensum (Kline 1994: kap. 4; Pett et al. 2003:102ff).
 
 ---
 # Principal component analysis (PCA)
@@ -357,21 +344,21 @@ Intuitionen: PCA sorterer i alt den variation,som en række manifeste indikatore
 ]
 
 
-&lt;img src="https://cdn.pixabay.com/photo/2013/07/12/13/55/funnel-147577_960_720.png"
+<img src="https://cdn.pixabay.com/photo/2013/07/12/13/55/funnel-147577_960_720.png"
      width="260px" height="260px"
-     style="position:absolute; right:250px; top:350px;"&gt;
+     style="position:absolute; right:250px; top:350px;">
      
 ---
 # Principal component analysis (PCA)
 
 Forestil jer en målemodel af følgende form: 
-`$$y_i = \beta_{1}I_{1i} + \beta_{2}I_{2i} + ... + \beta_{k}I_{ki}$$`
+$$y_i = \beta_{1}I_{1i} + \beta_{2}I_{2i} + ... + \beta_{k}I_{ki}$$
 
-PCA producerer nye komponenter/variable, som man kan tænke på som `\(y_i\)` i modellen ovenfor. Disse komponenter konstrueres på baggrund af en vægtet sumskala af vores indikatorvariable (de ti spørgsmål). `\(\beta\)`-værdierne indikerer vægtene for hvert item. 
+PCA producerer nye komponenter/variable, som man kan tænke på som $y_i$ i modellen ovenfor. Disse komponenter konstrueres på baggrund af en vægtet sumskala af vores indikatorvariable (de ti spørgsmål). $\beta$-værdierne indikerer vægtene for hvert item. 
 
-PCA vælger `\(\beta\)`-værdier sådan at `\(Var(y_i)\rightarrow \max\)`. Dvs den nye variabel indeholde så meget af variationen på tværs af indikatorvariablene som muligt! 
+PCA vælger $\beta$-værdier sådan at $Var(y_i)\rightarrow \max$. Dvs den nye variabel indeholde så meget af variationen på tværs af indikatorvariablene som muligt! 
 
-Med andre ord reducerer man antallet af variable til `\(i\)` komponenter, der maksimerer variansen i de oprindelige variable. PCA tildeler vægte således, at de nye variable indeholder så meget information som muligt.   
+Med andre ord reducerer man antallet af variable til $i$ komponenter, der maksimerer variansen i de oprindelige variable. PCA tildeler vægte således, at de nye variable indeholder så meget information som muligt.   
 ---
 # Principal component analysis (PCA)
 .left-column[
@@ -381,7 +368,9 @@ Illustrationen her viser, at den maksimale varians og minimale målefejl findes 
 
 .right-column[
 
-&lt;img src="https://i.stack.imgur.com/Q7HIP.gif" width="100%" /&gt;
+```{r, echo = FALSE, out.width='100%'}
+knitr::include_graphics('https://i.stack.imgur.com/Q7HIP.gif')
+```
 
 .center[.backgrnote[Source: ["amoeba" on Stackexchange](https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues/2700)]]
 ]
@@ -393,13 +382,13 @@ Illustrationen her viser, at den maksimale varians og minimale målefejl findes 
 
 + Motivation: Hvilke variable tror jeg ”måler det samme”?
 
-+ Eller: Består et begrebet af en eller to dimensioner? &lt;break&gt;
++ Eller: Består et begrebet af en eller to dimensioner? <break>
 
 **2. Identificer antallet af faktorer**
-+ Hvordan man gør det i praksis, vender vil tilbage til… &lt;break&gt;
++ Hvordan man gør det i praksis, vender vil tilbage til… <break>
 
 **3. Roter dine faktorer (!)**
-+ En operation, der gør dine factor loadings fortolkelige (vender vi også tilbage til)&lt;break&gt;
++ En operation, der gør dine factor loadings fortolkelige (vender vi også tilbage til)<break>
 
 ---
 # PCA HOW TO
@@ -415,7 +404,7 @@ Eller konstruér simple skalaer/indeks med udgangspunkt i din faktoranalyses res
 # Eksempel 
 
 Lad os prøve at se på et eksempel fra European social survey omkring generaliseret tillid. Survyen indeholder fem spørgsmål (items/variable), som spørger ind til borgernes tillid til en række samfundsmæssige institutioner:
-&lt;break&gt;
+<break>
 
 **1** `parliament = Trust in parliament`, 
 
@@ -434,16 +423,42 @@ Lad os prøve at se på et eksempel fra European social survey omkring generalis
 ---
 # Eksempel
 
+```{r, include=FALSE}
 
-Vi kan start med at undersøge korrelationsmatricen:
+# Read dataset (for now as dta file, which Haven can help with)
+
+ESS_DK <- read_dta("C:/Users/mmn/ROCKWOOL Foundation Dropbox/Mikkeline Munk Nielsen/Nyere statistiske analysestrategier F23/slides-mmn/NSA23/ESS6DK.dta")
+
+ESS_DK <- ESS_DK %>%
+  zap_labels() %>% 
+  transmute(
+    #Openness indicators (coding missing values):
+    parliament = if_else(trstprl %in% c(88:99), NA_real_, trstprl),
+    legal_system = if_else(trstlgl %in% c(88:99), NA_real_, trstlgl),
+    police = if_else(trstplc %in% c(88:99), NA_real_, trstplc),
+    politicians = if_else(trstplt %in% c(88:99), NA_real_, trstplt),
+    parties = if_else(trstprt %in% c(88:99), NA_real_, trstprt),
+
+    #Education variables:
+    edu = case_when(
+      edulvlb %in% c(8888:9999) ~ NA_real_,
+      edulvlb %in% c(0:600) ~ 0,
+      TRUE ~ 0,
+      edulvlb %in% c(601:801) ~ 1,
+      TRUE ~ 1)) %>%
+  #Restricting sample to non-missing:
+  drop_na()
 
 ```
-##              parliament legal_system    police politicians   parties
-## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
-## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
-## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
-## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
-## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
+Vi kan start med at undersøge korrelationsmatricen:
+```{r echo=FALSE}
+
+(ESS_DK %>% 
+    dplyr::select(parliament, legal_system, police, politicians, 
+                  parties) %>% 
+    cor())
+
+
 ```
 **2 min med sidemanden:** Undersøg korrelationsmatricen med din sidemakker. Hvad fortæller den os om sammenhængene mellem de fem items?
 
@@ -451,14 +466,14 @@ Vi kan start med at undersøge korrelationsmatricen:
 # Eksempel
 
 Vi kan start med at undersøge korrelationsmatricen:
+```{r echo=FALSE}
 
-```
-##              parliament legal_system    police politicians   parties
-## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
-## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
-## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
-## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
-## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
+(X<- ESS_DK %>% 
+    dplyr::select(parliament, legal_system, police, politicians, 
+                  parties) %>% 
+    cor())
+
+
 ```
 **2 min med sidemanden:** Undersøg korrelationsmatricen med din sidemakker. Hvad fortæller den os om sammenhængene mellem de fem items?
 
@@ -514,7 +529,9 @@ Derfor gennemgår vi lige de grundlæggende processer, der ligger til grund for 
 ]
 
 .pull-right[
-&lt;img src="https://media.tenor.com/xJfQQ-t9u3oAAAAM/success-kid-hells-yes.gif" width="70%" /&gt;
+```{r, echo = FALSE, out.width='70%'}
+knitr::include_graphics('https://media.tenor.com/xJfQQ-t9u3oAAAAM/success-kid-hells-yes.gif')
+```
 ]
 
 
@@ -522,7 +539,7 @@ Derfor gennemgår vi lige de grundlæggende processer, der ligger til grund for 
 # I PCA maskinrummet
 PCA baserer sig på eigenvalue decompositions, dvs. dekompositioner af en korrelationsmatrice ud i dens egenværdier og egenvektorer.
 
-**1)** Egenværdier: en enkelt værdi, `\(\lambda\)`, der representerer, hvor stor en andel af variansen i de oprindelige items, som kan forklares af en given komponent (eller faktor).
+**1)** Egenværdier: en enkelt værdi, $\lambda$, der representerer, hvor stor en andel af variansen i de oprindelige items, som kan forklares af en given komponent (eller faktor).
 
 **2)** Egenvektorer er ***kollonner*** af vægte, der hver er associeret med et item i korrelationsmatricen (jvf. vores snak om vægtede sumskalaer). Det er fra egenvektorerne, at vi udregner *factor loadings*, der representerer korrelationen mellem hvert originale item og nye komponent. 
 
@@ -532,23 +549,23 @@ PCA baserer sig på eigenvalue decompositions, dvs. dekompositioner af en korrel
 # I PCA maskinrummet
 PCA udtrækker komponenter fra korrelationsmatricen via. en iterativ (gentagende) process, der går ud på at finde en passende egenvektor og egenværdi til at udregne factor loadings for en komponent. 
 
-- Den første komponent, `\(PC_1\)`, er en lineær kombination af de originale items, der forklarer den maksimale andel af variansen blandt variablene. 
+- Den første komponent, $PC_1$, er en lineær kombination af de originale items, der forklarer den maksimale andel af variansen blandt variablene. 
 
-- Egenværdien for `\(PC_1\)`, `\(\lambda_1\)`, repræsenterer, hvor meget af variansen i korrelationsmatricen `\(PC_1\)` forklarer. Den er givet ved summen af kvarderede factorloadings for komponenten.
+- Egenværdien for $PC_1$, $\lambda_1$, repræsenterer, hvor meget af variansen i korrelationsmatricen $PC_1$ forklarer. Den er givet ved summen af kvarderede factorloadings for komponenten.
 
 
 - Factor loadings (som findes på bagrgund af egenvektorer og egenværdier) representerer korrelationen mellem hvert item i korrelationsmatricen med og komponenterne
 
 ---
 # I PCA maskinrummet
-Komponent nummer to, `\(PC_2\)`, findes på nøjagtig samme måde... **MEN!**
+Komponent nummer to, $PC_2$, findes på nøjagtig samme måde... **MEN!**
 
 
-- Forskellen er, at `\(PC_2\)` ikke findes udtrækkes fra den originale korrelationsmatrice, men fra en *residualmatrice*, hvor effekten af det første komponent allerede er udtrukket. 
+- Forskellen er, at $PC_2$ ikke findes udtrækkes fra den originale korrelationsmatrice, men fra en *residualmatrice*, hvor effekten af det første komponent allerede er udtrukket. 
 
-- Fordi indflydelsen fra `\(PC_1\)` allerede er taget ud,er `\(PC_2\)` ukorreleret (othogonal) med `\(PC_1\)`, og forklarer dermed *anden-mest* variation, der er tilbage after at have udtrukket første komkponent. 
+- Fordi indflydelsen fra $PC_1$ allerede er taget ud,er $PC_2$ ukorreleret (othogonal) med $PC_1$, og forklarer dermed *anden-mest* variation, der er tilbage after at have udtrukket første komkponent. 
 
-- Egenværdien for anden komponent, `\(\lambda_2\)`, er derfor nødvendigvis den anden-største egenværdi
+- Egenværdien for anden komponent, $\lambda_2$, er derfor nødvendigvis den anden-største egenværdi
 
 
 Processen med at udtrække komponenter fortsættes på de efterfølgende residualmatricer indtil elementerne i residual varians-covarians matricen er reduceret til tilfældig støj. 
@@ -562,61 +579,65 @@ Lad os prøve at se, hvordan PCA udregner disse komponenter...
 
 
 PCA starter med korrelationsmatricen:
+```{r echo=FALSE}
 
-```
-##              parliament legal_system    police politicians   parties
-## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
-## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
-## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
-## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
-## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
-## Sum           3.3369180    3.0832890 2.6893480   3.4186490 3.3403830
-```
-** Step 1** sum korrelationskoeficienterne i hvert kolonne. Disse værdier udgør en vector `\(U_{a1}\)`
+U_a1 <- colSums(X)
+X <- rbind(X, c(3.336918,3.083289,2.689348,3.418649,3.340383))
 
-Altså er `\(U_{a1}=[3.336918,3.083289,2.689348,3.418649,3.340383]\)`
+rownames(X)<- c("parliament", "legal_system", "police", "politicians", "parties", "Sum")
+
+X  
+  
+```
+** Step 1** sum korrelationskoeficienterne i hvert kolonne. Disse værdier udgør en vector $U_{a1}$
+
+Altså er $U_{a1}=[3.336918,3.083289,2.689348,3.418649,3.340383]$
 ---
 # I PCA maskinrummet
 
-** Step 2** Normalisér `\(U_{a1}\)` ved at kvardrere og addere summen af kollonnerne i `\(U_{a1}\)`. Divider så hvert element med kvadratroden af summen af kvardraterne. Resultatet bliver den første "trial vector" `\(V_{a1}\)`.
+** Step 2** Normalisér $U_{a1}$ ved at kvardrere og addere summen af kollonnerne i $U_{a1}$. Divider så hvert element med kvadratroden af summen af kvardraterne. Resultatet bliver den første "trial vector" $V_{a1}$.
 
-Dvs. hvis `\(U_{a1}=[3.34,3.08,2.69,3.42,3.34]\)`
+Dvs. hvis $U_{a1}=[3.34,3.08,2.69,3.42,3.34]$
 
-Så er `\(U_{a1}^2=[11.14, 9.51, 7.24, 11.69, 11.16]\)`
+Så er $U_{a1}^2=[11.14, 9.51, 7.24, 11.69, 11.16]$
+```{r include=FALSE}
 
+U_a1_2 = U_a1^2
+sum(U_a1_2)
 
-Summen af `\(U_{a1}^2 = 50.72\)`
+sqrt(sum(U_a1_2))
 
-Dernæst finder vi kvardratroden `\(\sqrt{50.72} = 7.12\)` 
+(V_a1 <- U_a1/sqrt(sum(U_a1_2)))
+```
 
-For at finde `\(V_{a1}\)` normaliserer vi nu `\(U_{a1}\)` ved at dividere elementerne med `\(7.12\)`. Vores første trial vector er således:
+Summen af $U_{a1}^2 = 50.72$
 
-`\(V_{a1}=[0.47, 0.43, 0.38, 0.48, 0.47]\)`
+Dernæst finder vi kvardratroden $\sqrt{50.72} = 7.12$ 
+
+For at finde $V_{a1}$ normaliserer vi nu $U_{a1}$ ved at dividere elementerne med $7.12$. Vores første trial vector er således:
+
+$V_{a1}=[0.47, 0.43, 0.38, 0.48, 0.47]$
 
 ---
 # I PCA maskinrummet
 
 ** Step 3** Find den anden trial vector
 
-Elementerne i `\(V_{a1}\)` ganges akkumuleret med værdierne fra første række i korrelationsmatricen, for at finde første element i en ny vektor, `\(U_{a2}\)`:
+Elementerne i $V_{a1}$ ganges akkumuleret med værdierne fra første række i korrelationsmatricen, for at finde første element i en ny vektor, $U_{a2}$:
 
-
+```{r echo=FALSE}
+(X)
 ```
-##              parliament legal_system    police politicians   parties
-## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
-## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
-## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
-## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
-## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
-## Sum           3.3369180    3.0832890 2.6893480   3.4186490 3.3403830
+```{r include=FALSE}
+(0.4685518*1)+(0.4329386*0.5584236)+(0.3776236*0.3784972)+(0.4800280*0.7224152)+(0.4690383*0.6775825)
+(0.47*0.56)+(0.43*1)+(0.38*0.58)+(0.48*0.48)+(0.47*0.46)
 ```
 
+$V_{a1}=[0.47, 0.43, 0.38, 0.48, 0.47]$
 
-`\(V_{a1}=[0.47, 0.43, 0.38, 0.48, 0.47]\)`
+Første element: $0.47*1 + 0.43*0.56 + 0.38*0.38 + 0.48*0.72 + 0.47*0.68 = 1.52$
 
-Første element: `\(0.47*1 + 0.43*0.56 + 0.38*0.38 + 0.48*0.72 + 0.47*0.68 = 1.52\)`
-
-Andet element: `\(0.47*0.56+ 0.43*1 + 0.38*0.58 + 0.48*0.48 + 0.47*0.46 = 1.36\)`
+Andet element: $0.47*0.56+ 0.43*1 + 0.38*0.58 + 0.48*0.48 + 0.47*0.46 = 1.36$
 
 ... til vi har fem elementer (tænk på matricens dimensioner)
 
@@ -624,42 +645,65 @@ Andet element: `\(0.47*0.56+ 0.43*1 + 0.38*0.58 + 0.48*0.48 + 0.47*0.46 = 1.36\)
 # I PCA maskinrummet
 
 ** Step 3 (fortsat)** Find den anden trial vector
+```{r include=FALSE}
+(0.4685518*1)+(0.4329386*0.5584236)+(0.3776236*0.3784972)+(0.4800280*0.7224152)+(0.4690383*0.6775825)
+(0.47*0.56)+(0.43*1)+(0.38*0.58)+(0.48*0.48)+(0.47*0.46)
+(0.47*0.3784972)+(0.43*0.5763997)+(0.38*1)+(0.48*0.3742397)+(0.47*0.3602119)
+(0.47*0.7224152)+(0.43*0.4839359)+(0.38*0.3742397)+(0.48*1)+(0.47*0.8380581)
+(0.47*0.6775825)+(0.43*0.4645301)+(0.38*0.3602119)+(0.48*0.8380581)+(0.47*1)
 
 
-Første element: `\(0.47*1.00 + 0.43*0.56 + 0.38*0.38 + 0.48*0.72 + 0.47*0.68 = 1.52\)`
+U_a2 = c(1.52,1.36,1.15,1.56,1.53)
 
-Andet element: `\(0.47*0.56+ 0.43*1.00 + 0.38*0.58 + 0.48*0.48 + 0.47*0.46 = 1.36\)`
+U_a2_2 = U_a2^2
 
-Tredje element: `\(0.47*0.38+0.43*0.58+0.38*1.00+0.48*0.37+0.47*0.36 = 1.15\)`
+sum(U_a2_2)
 
-Fjerde element: `\(0.47*0.72+0.43*0.48+0.38*0.37+0.48*1.00+0.47*0.84 = 1.56\)`
 
-Femte element: `\(0.47*0.68+0.43*0.46+0.38*0.36+0.48*0.84+0.47*1.00 = 1.53\)`
+sqrt(sum(U_a2_2))
+
+V_a1=U_a2/sqrt(sum(U_a2_2))
+
+
+
+
+
+```
+
+Første element: $0.47*1.00 + 0.43*0.56 + 0.38*0.38 + 0.48*0.72 + 0.47*0.68 = 1.52$
+
+Andet element: $0.47*0.56+ 0.43*1.00 + 0.38*0.58 + 0.48*0.48 + 0.47*0.46 = 1.36$
+
+Tredje element: $0.47*0.38+0.43*0.58+0.38*1.00+0.48*0.37+0.47*0.36 = 1.15$
+
+Fjerde element: $0.47*0.72+0.43*0.48+0.38*0.37+0.48*1.00+0.47*0.84 = 1.56$
+
+Femte element: $0.47*0.68+0.43*0.46+0.38*0.36+0.48*0.84+0.47*1.00 = 1.53$
 
 .pull-left[
 Dvs at: 
 
-`\(U_{a2} = [1.52,1.36,1.15,1.56,1.53]\)`, og 
+$U_{a2} = [1.52,1.36,1.15,1.56,1.53]$, og 
 
-`\(U_{a2}^2 = [2.31, 1.85, 1.32, 2.43, 2.34]\)`  
+$U_{a2}^2 = [2.31, 1.85, 1.32, 2.43, 2.34]$  
 
 ]
 
 ---
 # I PCA maskinrummet
 
-** Step 4** Normaliserer `\(U_{a2}\)` præcis som med `\(U_{a1}\)`:
+** Step 4** Normaliserer $U_{a2}$ præcis som med $U_{a1}$:
 
 
-Summen af `\(U_{a2}^2= 10.257\)` 
+Summen af $U_{a2}^2= 10.257$ 
 
-og `\(\sqrt{10.257} = 3.2\)` 
+og $\sqrt{10.257} = 3.2$ 
 
 
 
-Hvert element i `\(U_{a1}\)` divideres nu med `\(3.2\)`, dvs `\(\sqrt{\sum_{U_{a2}^2}}\)`, hvilket giver os den anden trial vector:
+Hvert element i $U_{a1}$ divideres nu med $3.2$, dvs $\sqrt{\sum_{U_{a2}^2}}$, hvilket giver os den anden trial vector:
 
-`\(V_{a2}=[0.47, 0.42, 0.36, 0.49, 0.48]\)`
+$V_{a2}=[0.47, 0.42, 0.36, 0.49, 0.48]$
 
 ---
 # I PCA maskinrummet
@@ -667,25 +711,37 @@ Hvert element i `\(U_{a1}\)` divideres nu med `\(3.2\)`, dvs `\(\sqrt{\sum_{U_{a
 
 **Step 5** Sammenlign de to trial vectors. 
 
-`\(V_{a1}=[0.47, 0.43, 0.38, 0.48, 0.47]\)`
+$V_{a1}=[0.47, 0.43, 0.38, 0.48, 0.47]$
 
-`\(V_{a2}=[0.47, 0.42, 0.36, 0.49, 0.48]\)`
-
-
-PCA fortsætter med at producere og sammenligne trial vectors indtil de "konvergerer", dvs. indtil de er så godt som ens (Kline skriver at kriteriet for konvergens er, at summen at de kvardrerede forskelle mellem de parvise elementer er &lt; 0.00001). 
-
-Vores trial vectors er således ikke tilfredsstillende endnu. Hvis vi forestiller os, at der opnås konvergens mellem trial vector `\(V_{a4}\)` og `\(V_{a3}\)`, vil `\(V_{a3}\)` blive den første **egenvektor**. Den kunne tage følgende værdier:
+$V_{a2}=[0.47, 0.42, 0.36, 0.49, 0.48]$
 
 
+PCA fortsætter med at producere og sammenligne trial vectors indtil de "konvergerer", dvs. indtil de er så godt som ens (Kline skriver at kriteriet for konvergens er, at summen at de kvardrerede forskelle mellem de parvise elementer er < 0.00001). 
 
-`\(V_a = [0.48, 0.42, 0.35, 0.49, 0.48]\)`
+Vores trial vectors er således ikke tilfredsstillende endnu. Hvis vi forestiller os, at der opnås konvergens mellem trial vector $V_{a4}$ og $V_{a3}$, vil $V_{a3}$ blive den første **egenvektor**. Den kunne tage følgende værdier:
+
+```{r include=FALSE}
+
+
+pca <- (ESS_DK %>% 
+          dplyr::select(parliament, legal_system, police, politicians, 
+                  parties) %>% 
+          prcomp(center=TRUE, scale=TRUE))
+
+PC1 <- pca$rotation[,1]
+
+
+
+```
+
+$V_a = [0.48, 0.42, 0.35, 0.49, 0.48]$
 
 ---
 # I PCA maskinrummet
 
 - Vi har nu fundet den første egenvektor!
 
-- Vi finder den første egenværdi `\(\lambda_1\)` ved at tage kvardratroden af kvardratsummen i den fjerde trial vector `\(U_{a4}\)`
+- Vi finder den første egenværdi $\lambda_1$ ved at tage kvardratroden af kvardratsummen i den fjerde trial vector $U_{a4}$
 
 
 
@@ -708,9 +764,9 @@ Herfra gentages processen med at udtrække trial vectors (dog nu fra residualmat
 
 .pull-right[
 
-&lt;img src="https://t3.ftcdn.net/jpg/03/03/51/88/360_F_303518863_scqhSaTDoI6L8eff93AvWpJMwC1PIMv0.jpg"
+<img src="https://t3.ftcdn.net/jpg/03/03/51/88/360_F_303518863_scqhSaTDoI6L8eff93AvWpJMwC1PIMv0.jpg"
      width="350px" height="350px"
-     style="position:absolute; right:200px; top:300px;"&gt;
+     style="position:absolute; right:200px; top:300px;">
 ]
 
 ---
@@ -721,70 +777,34 @@ Som I kan se er PCA egentlig ikke en særlig kompliceret operation, der er bare 
 Heldigvis har I lært at kode i R. Med andre ord behøver I aldrig at gøre det her igen... I skal bare gøre sådan her:
 
 
-
-```r
-(pca &lt;- (ESS_DK %&gt;% 
+```{r, echo=TRUE}
+(pca <- (ESS_DK %>% 
           dplyr::select(parliament, legal_system, police, politicians, 
-                  parties) %&gt;% 
+                  parties) %>% 
           prcomp(center=TRUE, scale=TRUE)))
-```
 
-```
-## Standard deviations (1, .., p=5):
-## [1] 1.7901072 0.9471709 0.6592398 0.5530609 0.3973792
-## 
-## Rotation (n x k) = (5 x 5):
-##                     PC1        PC2        PC3        PC4         PC5
-## parliament   -0.4757480 -0.1972727 -0.3697872  0.7620959  0.13120421
-## legal_system -0.4217429  0.4622473 -0.6373561 -0.4491985 -0.02140483
-## police       -0.3536159  0.6994720  0.5740129  0.2367686  0.01201909
-## politicians  -0.4907882 -0.3524476  0.2112896 -0.1659430 -0.75015153
-## parties      -0.4794576 -0.3659652  0.2879242 -0.3658333  0.64765385
 ```
 ---
 # PCA i praksis
 Componenternes standardafvigelser (SD) fortæller os om vigtigheden at hvert komponent.
-
-```r
+```{r, echo=TRUE}
 summary(pca)
 ```
-
-```
-## Importance of components:
-##                           PC1    PC2     PC3     PC4     PC5
-## Standard deviation     1.7901 0.9472 0.65924 0.55306 0.39738
-## Proportion of Variance 0.6409 0.1794 0.08692 0.06118 0.03158
-## Cumulative Proportion  0.6409 0.8203 0.90724 0.96842 1.00000
-```
 Hvis vi kvardrerer dem, får vi de såkaldte eigenværdier!
+```{r, echo=TRUE}
+(pca$eigen_values <- pca$sdev^2)
 
-```r
-(pca$eigen_values &lt;- pca$sdev^2)
-```
-
-```
-## [1] 3.2044837 0.8971327 0.4345971 0.3058763 0.1579102
 ```
 ---
 # PCA i praksis
 
 Egenværdierne repræsenterer som sagt komponenternes forklaringskraft. Hvis vi deler egenværdierne med antallet af komponenter, får vi andelen af variationen i den originale korrelationsmatrice, som hvert komponenten forklarer
-
-```r
-(pca$prop_var &lt;- pca$eigen_values/5)
-```
-
-```
-## [1] 0.64089674 0.17942653 0.08691941 0.06117527 0.03158204
+```{r, echo=TRUE}
+(pca$prop_var <- pca$eigen_values/5)
 ```
 Dette fremgår også af outputtet fra summary funktionen
-
-```
-## Importance of components:
-##                           PC1    PC2     PC3     PC4     PC5
-## Standard deviation     1.7901 0.9472 0.65924 0.55306 0.39738
-## Proportion of Variance 0.6409 0.1794 0.08692 0.06118 0.03158
-## Cumulative Proportion  0.6409 0.8203 0.90724 0.96842 1.00000
+```{r echo=FALSE}
+summary(pca)
 ```
 
 **2 min med sidemanden** Hvad betyder "Cumulative Proportion" og hvorfor giver det mening, at de fem komopnenter summer til 100? 
@@ -822,14 +842,12 @@ Hvis dette ikke er tilfældet, vil item’et sjældent kunne bidrage til at fort
 Disse items kan enten fjernes, eller man kan begrunde at tage dem med ud fra teoretiske argumenter og så være særlig opmærksomme på dem i analysen.
 
 ** 2 min med sidemanden: opfylder korrelationsmatricen fra før denne betingelse?**
+```{r echo=FALSE}
 
-```
-##              parliament legal_system    police politicians   parties
-## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
-## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
-## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
-## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
-## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
+(ESS_DK %>% 
+    dplyr::select(parliament, legal_system, police, politicians, 
+                  parties) %>% 
+    cor())
 ```
 ---
 # Forudsætninger for PCA
@@ -856,21 +874,12 @@ Pett et al. fremhæver to formelle tests:
 
 - Ved værdier over 0,8 anses matricen for at være tilstrækkelig faktorabel. 
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 
-```r
 library(psych) # library der indeholder KMO-funktion og funktion til bartletts-test
-(ESS_DK %&gt;% 
-    dplyr::select(parliament, legal_system, police, politicians, parties) %&gt;% 
+(ESS_DK %>% 
+    dplyr::select(parliament, legal_system, police, politicians, parties) %>% 
     KMO()) # KMO funktion
-```
-
-```
-## Kaiser-Meyer-Olkin factor adequacy
-## Call: KMO(r = .)
-## Overall MSA =  0.78
-## MSA for each item = 
-##   parliament legal_system       police  politicians      parties 
-##         0.86         0.78         0.77         0.73         0.76
 ```
 
 ---
@@ -881,22 +890,10 @@ library(psych) # library der indeholder KMO-funktion og funktion til bartletts-t
 - Tester om korrelationsmatricen er en såkaldt ”identitetsmatrix”, hvilket er ensbetydende med, at alle variable er ukorrelerede. 
 
 - Små p-værdier (under 0,05) indikerer, at matricen er velegnet til faktoranalyse (forkaster H0, som er uafhængighed).
-
-```r
-(ESS_DK %&gt;% 
-    dplyr::select(parliament, legal_system, police, politicians, parties) %&gt;% 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+(ESS_DK %>% 
+    dplyr::select(parliament, legal_system, police, politicians, parties) %>% 
     cortest.bartlett(n=1406)) # KMO funktion, argument n= antal observationer
-```
-
-```
-## $chisq
-## [1] 4462.743
-## 
-## $p.value
-## [1] 0
-## 
-## $df
-## [1] 10
 ```
 
 ---
@@ -911,8 +908,10 @@ Derfor bruger man en eller flere selektionsregler, dvs. nogle principper for, hv
 ]
 
 .pull-right[
-&lt;img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb9alKsnNOkFBmF7QGXv-_9zUQg85duotwDA&amp;usqp=CAU
-" width="55%" /&gt;
+```{r, echo = FALSE, out.width='55%'}
+knitr::include_graphics('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb9alKsnNOkFBmF7QGXv-_9zUQg85duotwDA&usqp=CAU
+')
+```
 ]
 
 ---
@@ -920,7 +919,7 @@ Derfor bruger man en eller flere selektionsregler, dvs. nogle principper for, hv
 
 Litteraturen fremhæver tre selektionsregler:
 
-**1)** Egenværdier &gt; 1 (Kaiser-Guttman kriteriet).
+**1)** Egenværdier > 1 (Kaiser-Guttman kriteriet).
 
 **2)** Cattell’s scree test (scree plot).
 
@@ -932,17 +931,12 @@ Bemærk: Pett et al. fremhæver kun 1+2, da 3 er relativt ny. Hayton et al. (200
 ---
 # Hvor mange komponenter?
 
-** Kaiser-Guttman kriteriet: behold eigenværdier &gt; 1**
+** Kaiser-Guttman kriteriet: behold eigenværdier > 1**
 
 - Rationale: Egenværdier større end 1 indikerer, at komponenten kan forklare mere end, hvad én indikatorvariabel kan forklare (og det giver jo ikke mening at beholde noget, der forklarer mindre end de oprindelige variable...)
 
-
-```r
+```{r}
 (pca$eigen_values) # print eigenværdier
-```
-
-```
-## [1] 3.2044837 0.8971327 0.4345971 0.3058763 0.1579102
 ```
 
 Ulemper ved Kaiser-Guttman kriteriet: 
@@ -960,8 +954,7 @@ Også kendt som the elbow test: Dér hvor grafen – eller albuen – ”knække
 Få, store komponenter vil forklare en større del af variansen, efterfulgt af en række mindre betydelige komponenter. Vi er kun interesseret i de vigtigste komponenter.  
 
 
-
-```r
+```{r include=TRUE, eval=FALSE}
 # Visualize PCA object
 fviz_eig(pca) 
 ```
@@ -1005,11 +998,10 @@ Nogle gange er der ikke et tydeligt knæk, hvilket lægger op til fortolkning ..
 #Parallel analysis
 
 
-
-```r
+```{r eval=FALSE}
 library(paran)
-(ESS_DK %&gt;% 
-  dplyr::select(parliament, legal_system, police, politicians, parties) %&gt;% 
+(ESS_DK %>% 
+  dplyr::select(parliament, legal_system, police, politicians, parties) %>% 
   paran(graph=T))
 ```
 
@@ -1021,142 +1013,3 @@ library(paran)
 ]
 ** Parallel analysis: simulationsbaseret teknik**
 
-    </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script>var slideshow = remark.create({
-"highlightLanguage": "r",
-"highlightStyle": "zenburn",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9",
-"self_contained": true
-});
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
-  window.dispatchEvent(new Event('resize'));
-});
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
-  if (!r) return;
-  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
-  d.head.appendChild(s);
-})(document);
-
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
-  }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
-})();
-// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
-// screen reader (see PR #262)
-(function(d) {
-  let res = {};
-  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
-    const t = tr.querySelector('td:nth-child(2)').innerText;
-    tr.querySelectorAll('td:first-child .key').forEach(key => {
-      const k = key.innerText;
-      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
-    });
-  });
-  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
-})(document);
-(function() {
-  "use strict"
-  // Replace <script> tags in slides area to make them executable
-  var scripts = document.querySelectorAll(
-    '.remark-slides-area .remark-slide-container script'
-  );
-  if (!scripts.length) return;
-  for (var i = 0; i < scripts.length; i++) {
-    var s = document.createElement('script');
-    var code = document.createTextNode(scripts[i].textContent);
-    s.appendChild(code);
-    var scriptAttrs = scripts[i].attributes;
-    for (var j = 0; j < scriptAttrs.length; j++) {
-      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
-    }
-    scripts[i].parentElement.replaceChild(s, scripts[i]);
-  }
-})();
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-// adds .remark-code-has-line-highlighted class to <pre> parent elements
-// of code chunks containing highlighted lines with class .remark-code-line-highlighted
-(function(d) {
-  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
-  const preParents = [];
-  const findPreParent = function(line, p = 0) {
-    if (p > 1) return null; // traverse up no further than grandparent
-    const el = line.parentElement;
-    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
-  };
-
-  for (let line of hlines) {
-    let pre = findPreParent(line);
-    if (pre && !preParents.includes(pre)) preParents.push(pre);
-  }
-  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
-})(document);</script>
-
-<script>
-slideshow._releaseMath = function(el) {
-  var i, text, code, codes = el.getElementsByTagName('code');
-  for (i = 0; i < codes.length;) {
-    code = codes[i];
-    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
-      text = code.textContent;
-      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
-          /^\$\$(.|\s)+\$\$$/.test(text) ||
-          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
-        code.outerHTML = code.innerHTML;  // remove <code></code>
-        continue;
-      }
-    }
-    i++;
-  }
-};
-slideshow._releaseMath(document);
-</script>
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-(function () {
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
-  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
-    script.src  = script.src.replace(/^https?:/, '');
-  document.getElementsByTagName('head')[0].appendChild(script);
-})();
-</script>
-  </body>
-</html>
