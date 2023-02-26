@@ -364,6 +364,8 @@ Med andre ord reducerer man antallet af variable til $i$ komponenter, der maksim
 .left-column[
 Illustrationen her viser, at den maksimale varians og minimale målefejl findes samtidig, når den roterende linje når de magentafarvede linjer.
 
+
+PCA vil orientere sig mod denne linje for at maksimere varians!
 ]
 
 .right-column[
@@ -664,10 +666,6 @@ sqrt(sum(U_a2_2))
 
 V_a1=U_a2/sqrt(sum(U_a2_2))
 
-
-
-
-
 ```
 
 Første element: $0.47*1.00 + 0.43*0.56 + 0.38*0.38 + 0.48*0.72 + 0.47*0.68 = 1.52$
@@ -883,9 +881,7 @@ library(psych) # library der indeholder KMO-funktion og funktion til bartletts-t
 ```
 
 ---
-# Forudsætninger for PCA
-
-** Bartlett’s (sfæriske) test **
+# Bartlett’s (sfæriske) test
 
 - Tester om korrelationsmatricen er en såkaldt ”identitetsmatrix”, hvilket er ensbetydende med, at alle variable er ukorrelerede. 
 
