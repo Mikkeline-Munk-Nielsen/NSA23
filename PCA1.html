@@ -62,7 +62,7 @@ top:1em;right:1em;
   document.addEventListener('DOMContentLoaded', addLogo)
 })()</script>
 </div>
----
+
 # PCA forløbet
 
 **PCA 1: Introduktion**
@@ -176,14 +176,14 @@ Faktoranalysen kan motiveres ud fra en målemodel (dog med modifikationer, som v
 ![](Maalemodel.png)
 ]
 
+--
+
 .pull-right[
 Pilene i målemodellen siger noget om, hvordan den latente variable **F**, påvirker indikatorerne, **I**.
 
---
 
 Der er en underliggende antagelse om, at de manifeste indikatorer er betinget uafhængige, givet den latente variabel.
 
---
 
 Pilene svarer til det, vi i faktoranalyse kalder *factor loadings* (det vender vi tilbage til)
 ]
@@ -191,9 +191,11 @@ Pilene svarer til det, vi i faktoranalyse kalder *factor loadings* (det vender v
 # Faktoranalysen som målemodel
 
 - Hvor LCA er en personorienteret tilgang til data-mining, så er FA (herunder PCA) variabelorienteret.
+
 --
 
 - Med andre er ord handler det om at gruppere indikatorvariable på baggrund af, om de ”måler det samme” og derfor ”ligner hinanden”.
+
 --
 
 - LCA, derimod, handler om at gruppere personer på baggrund af, om personerne ligner hinanden…
@@ -223,17 +225,6 @@ Alternativt kan vi begive os ud i at vægte spørgsmålene alt efter, hvilke sp�
 Eksempel på en *vægtet* sumskala med 5 items:
 
 `$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$`
----
-
-# Skalakonstruktion
-
-Alternativt kan vi begive os ud i at vægte spørgsmålene alt efter, hvilke spørgsmål der indeholder mest variation. I dette tilfælde begiver vi os ud i en vægtet sumskala.
-
-Eksempel på en *vægtet* sumskala med 5 items:
-
-`$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$`
-
-**Summeøvelse i 2 min med sidemanden:** hvad er intuitionen i en vægtet sumskala? Hvad siger vægtene?
 
 ---
 
@@ -244,9 +235,15 @@ Eksempel på en *vægtet* sumskala med 5 items:
 
 `$$S = 0.5*I_i + 0.9*I_2+1*I_3+0.7*I_4+0.5*I_5$$`
 
+--
+
 **Summeøvelse i 2 min med sidemanden:** hvad er intuitionen i en vægtet sumskala? Hvad siger vægtene?
+
+--
 
 *I en vægtet sumskala tildeles items forskellige vægt på baggrund af deres relevans. Det kan faktoranalysen hjælpe os med!*
+
+--
 
 Med andre ord kan faktoranalyseen hjælpe os med at afgøre, hvilke variable der skal tildeles den største vægt til hvert komponent (nye variabel).
 ---
@@ -256,9 +253,13 @@ Med andre ord kan faktoranalyseen hjælpe os med at afgøre, hvilke variable der
 
 
 - Vi har stillet en gruppe af unge 5 forskellige spørgsmål om deres selværd målt på en skala fra 0-100
+
 --
+
 - Målet er at måle deres *overordnede* selvværd, dvs. et *latent* fænomen, som vi tror på "styrer" deres svar på de 5 spørgsmål
+
 --
+
 - Vi kan bruge faktoranalysetil at konstruere et nyt mål for overordnet selvværd, baseret på deres svar på de forskellige spørgsmål.
 
 ---
@@ -287,7 +288,7 @@ Betinget uafhængighed betyder, at:
 
 --
 
-- At tildele vægte til den "vægtede" sumskala - indikatorer, der er særlig konstitutiv for den latente variabel, bliver tildelt størst vægt
+- At tildele vægte til den "vægtede" sumskala, så indikatorer, der er særlig konstitutiv for den latente variabel, bliver tildelt størst vægt
 
 --
 
@@ -437,9 +438,13 @@ Med andre ord reducerer man antallet af variable til `\(i\)` komponenter, der ma
 - De komponenter som PCA finder, er altså lineære kombinationer, af de originale variable.
 
 ]
+
 .pull-right[
-![](scatterplot.png)
+![](Scatterplot.png)
+
+.center[.backgrnote[Source: ["amoeba" on Stackexchange](https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues/2700)]]
 ]
+
 
 
 ---
