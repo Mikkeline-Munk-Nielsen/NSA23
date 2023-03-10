@@ -601,10 +601,6 @@ Varimax er standarden. Se Pett et al. (2003) for flere metoder.*
 --
 
 *(note: det roterede plot viser ikke de korekte faktor loadings. Dem regner vi selv ud)*
-
---
-
-*(note: det roterede plot viser ikke de korekte faktor loadings. Dem regner vi selv ud)*
 ---
 # Rotationsmetoder
 
