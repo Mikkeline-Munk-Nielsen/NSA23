@@ -404,19 +404,29 @@ Pause(r)
 
 ***Eksempel på spørgsmål:*** Er der nationale forskelle i institutionel tillid?
 
+--
+
 **1)** Operationalisering: Hvilke spørgsmål måler institutionel tillid?
+
+--
 
 **2** Argumenter for brugen af PCA: Tillid er svært at måle med en enkel variabel. PCA kan hjælpe os med at skabe nye variable, der opsummerer den fælles variation på tværs af vores udvalgte variable. Samtidig kan vi bruge metoden til at vurdere, om der er en eller flere dimensioner på spil og trække de relevante ud!
 
+--
+
 - Redegør for de overordnede principper i PCA i generelle termer. Orienter jer f.eks. i Kline 1994:kap.1+3
 
-- I skal ikke udlede nogle komponenter i hånden. I skal bare redegøre for de grundlæggende principper i, at PCA kan udlede nye komponenter ved at dekomponere en korrelationsmatricen, og beskrive overordnet, hvordan den går til værks
+--
+
+- I skal ikke udlede noget i hånden eller gå ind i matematikken. I skal bare redegøre for de grundlæggende principper i, at PCA kan udlede nye komponenter ved at dekomponere en korrelationsmatrice og beskrive overordnet, hvordan den går til værks
 
 
 ---
 # Hvordan kunne en PCA-opgave se ud?
 
 **3) Undersøg om korrelationsmatricen mellem jeres udvalgte variable er faktorabel**
+
+--
 
 Redergør for og sammenlign de tre kriterier:
 
@@ -426,12 +436,16 @@ Redergør for og sammenlign de tre kriterier:
 
 - Bartlett’s (sfæriske) test
 
+--
+
 *Men husk at bruge dem heuristisk - jeres teoretiske argumenter skal også informere jeres valg*
 
 ---
 # Hvordan kunne en PCA-opgave se ud?
 
 **4) Kør PCA og bestem antal komponenter**
+
+--
 
 Argumenter for jeres valg på baggrund af de tre kriterier (og beskriv logikken bag dem):
 
@@ -441,12 +455,16 @@ Argumenter for jeres valg på baggrund af de tre kriterier (og beskriv logikken 
 
 - Parallel analysis (de facto standard i dag).
 
+--
+
 Hvis I er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at gå videre med et par forskellige. I skal vælge det antal, som giver de tydeligste komponenter, dvs. dem hvor I bedst kan skelne mellem dem, når I fortolker factor loadings. 
 
 ---
 # Hvordan kunne en PCA-opgave se ud?
 
 **5) Beskriv de komponenter, som I beholder**
+
+--
 
 - Udregn og roter factor loadings
 
@@ -463,9 +481,13 @@ Hvis I er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at g
 
 **6) Udregn forudsagte factor scores og brug variablen(e) i videre analyser**
 
+--
+
 - Husk at factor scores er standardiserede til middelværdi 0 og standardafvigelse 1. Komponenternes skala er altså i standardafvigelser!
 
 - Det er oplagt at køre regressionsanalyse med jeres nye komponenter og finde ud af, om der f.eks. er nationale/socioøkonomiske/demografiske forskelle
+
+--
 
 *No need to overdo et og køre fuld IV-estimation eller RD. En simpel multipel regressionsanalyse er rigeligt. Læringsmålet i faget er LCA og PCA, ikke andre fancy metoder!*
 
