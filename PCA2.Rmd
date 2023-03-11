@@ -47,7 +47,6 @@ style_mono_accent(
 )
 
 
-
 ```
 
 # Program for i dag
@@ -752,14 +751,33 @@ pca_obli$structure <- pca_obli$loadings %*% pca_obli$Phi
 **2 min med sidemanden** *Er der en forskel mellem factor pattern og factor structure matrix ved ortogonal rotation?*
 
 *De snakker om det i Pett et al. (2003)*
----
-# Rotationsmetoder
 
-**En sidste vigtig ting** *Hvilken løsning skal jeg rotere? Den fulde løsning eller kun de komponenter, som vi beholder”?*
+---
+#Rotationsmetoder
+
+
+Rotationsteknikken afgøres dels af teoretiske overvejelser *(forventer vi at komponenterne korrelerer?)* og dels ved sammenligning af de to forskellige løsninger. 
+
+I kan orientere jer efter:
+
+--
+
+- *Hvilken giver bedst simpel structure?* 
+
+--
+
+- *Ser komponenterne ud til at være korrelerede (undersøg factor correlation matrix)?*
+
+--
+
+**En sidste vigtig ting** 
+
+*Hvilken løsning skal jeg rotere? Den fulde løsning eller kun de komponenter, som vi beholder”?*
 
 --
 
 - Anbefalingen er at rotere løsningen med signifikante komponenter.
+
 
 ---
 # Program for resten af dagen:
