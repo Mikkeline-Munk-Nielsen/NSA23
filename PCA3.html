@@ -81,207 +81,245 @@ top:1em;right:1em;
 De sidste par gange har vi lært at...
 --
 
-- PCA er en statistisk metode, der transformerer en korrelationsmatrice med mange (korrelerede) variable til få variable, der er ukorrelerede med hinanden 
+- PCA er en statistisk metode, der man kan reducere ”mange variable” til ”få grundlæggende variable” som opsummerer den fælles variation i de ”mange variable”.
 
 --
 
-- PCA forsøger at ”mine” denne korrelationsmatrice ved at se, om alle korrelationer kan forklares af en (lineær) kombination af underliggende, ukorrelerede variable kaldet komponenter.
+- Det gør metoden særdeles praktisk til at måle et svært observerbare/latente fænomener eller begreber, fx en grundholdning, tillid, personlighed.
 
 --
 
-- Måde hvorpå man kan reducere ”mange variable” til ”få grundlæggende variable” som opsummerer informationen i de ”mange variable”.
-
---
-
-- Praktisk til at måle et svært observerbare fænomener eller begreber, fx en grundholdning, tillid, personlighed.
-
---
-
-- Kan hjælpe med at undersøge om et fænomen/begreb er en- eller flerdimensionelt. Er fx jobtilfredshed 1- eller 2-dimensionelt?
+- Kan hjælpe med at undersøge om et fænomen/begreb er en- eller flerdimensionelt
 
 
 ---
 # Recap
 
+.pull-left[
+![](Maalemodel.png)
+]
 
-***Det metodiske princip i PCA er følgende:***
+.pull-right[
+- Helt konkret kan PCA altså hjælpe os med at lave skalaer, der måler nogle af de sociale fænomener, som er vanskelige at observere direkte! 
 
---
-
-**1)** Identificer den første komponent, der forklarer så meget fællesvariation som muligt i korrelationsmatricen.
-
---
-
-**2)** Find da den anden komponent, der forklarer så meget som muligt af fællesvariation, der er tilbage i matricen efter man har trukket den første komponent ud!
-
---
-
-**3)** Fortsæt som i punkt 2 indtil der ikke er mere fællesvariation at forklare.
+- Sagt på en anden måde kan vi nemlig observere disse fænomener indirekte ved at lave nye variable, der opsummerer det, som en række manifeste variable har tilfælles.
+]
 
 ---
-# Recap
+# PCA trin for trin
 
-**MEN!** 
 
-Vi har også lært, at forudsætningen for PCA er, at der er høj korrelation mellem de items, som man kører PCA på. Korrelationsmatrien skal så at sige være ***faktorabel***.
-
---
-
-- Underesøg korrelationer mellem variable: Hver indikatorvariabel i en korrelationsmatrice skal have mindst en korrelation på over 0,3 (Hansen 2017)
+**1)** Udvælg manifeste variable, som relaterer sig til det fænomen, som I er interesserede i at undersøge (operationalisering)
 
 --
 
-- Kaiser-Meyer-Olkin test (KMO)
+**2)** Vurdér de manifeste variables samvariation - undersøg deres korrelationsmatrice og vurdér dens faktorabiliet. Korrelerer varaiblene nok til, at vi med rimelighed kan antage, at de måler det samme?
 
 --
 
-- Bartlett’s (sfæriske) test
+**3)** Kør en pca i R ved at bruge **`prcomp()`** - denne kommando dekomponerer korrelationsmatricen for jer og danner nye komponenter/variable
 
 --
 
-Disse tests siger noget om, hvor velegnet en korrelationsmatrice er til PCA (og FA generelt). Vi lærte dog også, at de skal og bør bruges heuristisk – ofte er teoretiske argumenter for medtagelse af indikatorer lige så centrale, hvis ikke vigtigere!
+**4)** Beslut hvor mange komponenter, det er meningsfuldt at beholde (vi vil jo gerne nedbringe antallet af variable til nogle få, der opsummerer de gamle)
+
+--
+
+**5)** Fortolk indholdet i de komponenter I har beholdt ved at analysere på hver komponents factor loadings. Vi roterer altid factor loadings for at lette fortolkningen, så vi bedre kan skelne mellem komponenterne.
+
+--
+
+**6)** Udtræk jeres nye variable og brug dem i analyser, som I plejer (temaet i dag)
 
 ---
-# Recap 
+# PCA trin for trin
 
-Fordi PCA forklarer al fællesvariationen i korrelationsmatricen finder den altid lige så mange komponenter, som der er indikatorvariable!
+** Trin 1: Udvælg manifeste variable**
 
---
+Operationaliseringen består i at vælge variable, der relaterer sig til det givne fænomen (her tillid). Disse er fra European Social survey:
 
-*Hvor mange komponenter beholder vi?* Ofte vil en god PCA være kendetegnet ved, at den reducerer antallet af variable, men fastholder de komponenter forklarer en betydelig del af den samlede variation eigenvalues
 
---
+**1** `parliament = Trust in parliament`, 
 
-***Litteraturen fremhæver tre selektionsregler:***
+**2** `legal_system = Trust in the legal system` 
 
---
+**3** `police = Trust in the police`
 
-**1)** Egenværdier &gt; 1 (Kaiser-Guttman kriteriet).
+**4** `politicians = Trust in politicians`
 
---
+**5** `parties = Trust in parties` 
 
-**2)** Cattell’s scree test (scree plot).
-
---
-
-**3)** Parallel analysis (de facto standard i dag).
+.pull-right[
+*Skala: 0 (no trust at all) - 10 (complete trust)*
+]
 
 
 ---
-# Recap
+# PCA trin for trin
 
-Når man har udtrukket det fastlagte antal komponenter, er næste step af fortolke indholdet i komponenterne. Det lærte vi sidste gang at gøre ved at udregne ***factor loadings***
+**2) Vurdér de manifeste variables samvariation** 
 
---
+Undersøg deres korrelationsmatrice og vurdér dens ***faktorabiliet***. Korrelerer varaiblene nok til, at vi med rimelighed kan antage, at de måler det samme?
 
-**Definition**: *En factor loading er korrelationen mellem en komponent og en indikatorvariabel. Vi bruger dem til at fortolke komponenterne!*
 
---
 
-Factor loadings kommer ud af den dekomposition, som PCAen laver:
+Vi kan start med at undersøge korrelationsmatricen:
 
---
+```
+##              parliament legal_system    police politicians   parties
+## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
+## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
+## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
+## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
+## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
+```
+---
+# PCA trin for trin
 
-  + ***Egenværdier*** repræsenterer komponenternes forklaringskraft, dsv. hvor meget af variationen i korrelationsmatricen, som en komponent fanger
+**2) Vurdér de manifeste variables samvariation** 
 
---
+*KMO-test*
 
-  + ***Egenvektorer*** er kollonner af vægte, der beskriver sammenhængen mellem de originale items og nye komponenter. 
+```
+## Kaiser-Meyer-Olkin factor adequacy
+## Call: KMO(r = matrice)
+## Overall MSA =  0.78
+## MSA for each item = 
+##   parliament legal_system       police  politicians      parties 
+##         0.86         0.78         0.77         0.73         0.76
+```
+*Bartletts sfæriske test*
 
---
+```
+## $chisq
+## [1] 4462.743
+## 
+## $p.value
+## [1] 0
+## 
+## $df
+## [1] 10
+```
+---
+# PCA trin for trin
 
-Factor loadings defineret som produktet mellem kvadratroden af egenværdien og en egenvektor
+**3) Kør en pca i R ved at bruge** **`prcomp()`**
+
+***1) egenvektorer*** 
+
+```
+## Standard deviations (1, .., p=5):
+## [1] 1.7901072 0.9471709 0.6592398 0.5530609 0.3973792
+## 
+## Rotation (n x k) = (5 x 5):
+##                     PC1        PC2        PC3        PC4         PC5
+## parliament   -0.4757480 -0.1972727 -0.3697872  0.7620959  0.13120421
+## legal_system -0.4217429  0.4622473 -0.6373561 -0.4491985 -0.02140483
+## police       -0.3536159  0.6994720  0.5740129  0.2367686  0.01201909
+## politicians  -0.4907882 -0.3524476  0.2112896 -0.1659430 -0.75015153
+## parties      -0.4794576 -0.3659652  0.2879242 -0.3658333  0.64765385
+```
+***2) egenværdier (sdev^2)***
+
+```r
+(pca$eigen_values &lt;- pca$sdev^2)
+```
+
+```
+## [1] 3.2044837 0.8971327 0.4345971 0.3058763 0.1579102
+```
+---
+# PCA trin for trin
+
+**4) Beslut hvor mange komponenter, det er meningsfuldt at beholde**
+
+.pull-left[
+**a)** Egenværdier &gt; 1 (Kaiser-Guttman kriteriet).
+
+**b)** Cattell’s scree test (scree plot).
+
+**c)** Parallel analysis (de facto standard i dag).
+]
+
+.pull-right[
+.center[
+![](Paran.png)
+]
+]
 
 ---
-# Recap
+# PCA trin for trin
 
-Vi lærte også, at factor loadings skal roteres. ***Hvorfor roterer vi??***
-
---
-
-- Komponenter i en PCA udspænder et flerdimensionalt rum, hvori de manifeste variable er placeret. 
-
---
-
-- Intuitionen er, at vi kan anskue det rum, som komponenterne udspænder, fra uendeligt mange vinkler.
-
---
-
-- Factor loadings vil afhænge af, hvorfra man ser rummet (lidt forsimplet sagt).
-
---
-
-- Rotation hjælper med at vælge en ”synsvinkel”, som giver en (mere) entydig fortolkning af komponenterne
-
----
-# Recap
+**5)** Fortolk indholdet i de komponenter I har beholdt med *factor loadings*
 
 
-***Altså roterer vi for at opnå simple structure, dvs. en struktur hvor hvert komponent kun loader højt på nogle af indikatorerne. Dette gør det lettere at skelne mellem komponenterne***
+```r
+(pca$factor_loadings &lt;- pca$rotation*t(matrix(rep(sqrt(pca$eigen_val),5),nrow=5,ncol=5))
+) # Læg mærke til at jeg har specificeret matricens dimensioner (5x5) 
+```
 
---
+```
+##                     PC1        PC2        PC3        PC4          PC5
+## parliament   -0.8516399 -0.1868509 -0.2437785  0.4214855  0.052137823
+## legal_system -0.7549651  0.4378272 -0.4201705 -0.2484341 -0.008505834
+## police       -0.6330103  0.6625195  0.3784122  0.1309475  0.004776135
+## politicians  -0.8785634 -0.3338281  0.1392905 -0.0917766 -0.298094603
+## parties      -0.8582804 -0.3466316  0.1898111 -0.2023281  0.257364157
+```
 
-- Simple structure er det ønskværdige mål at opnå, men ofte er det svært at overholde alle kriterier (kriterier, se Pett et al. (2003:132))
-
---
-
-- I virkelighedens verden er løsningen mere pragmatisk: Vi fortolker komponenter ud fra de højeste factor loadings - også selvom nogle indikatorer korrelerer højt med flere komponenter.
-
----
-# Recap
-
-Vi lærte også, at der skelnes mellem to typer af rotationer:
-
---
-
-- **ortogonale** (vinkelrette) rotationer. Her roteres akserne (komponenterne), så de er ortogonale på hinanden. Vi brugte *varimax*.
-
---
-
-- **oblique** (skrå) rotationer. Her tillader vi akserne (komponenterne) at være korrelerede. Vi brugte *promax*.
-
---
-
-Rotationsteknikken afgøres dels af teoretiske overvejelser (forventer vi at komponenterne korrelerer?) og dels ved sammenligning af de to forskellige løsninger. 
-
---
-
-*Hvilken giver bedst simpel structure?* 
-
---
-
-*Og ser komponenterne ud til at være korrelerede (undersøg factor correlation matrix)?*
-
----
-# Recap
-***Med andre ord har vi lært:***
-
-**1)** At undersøge, om en korrelationsmatrice er faktorabel
-
-**2)** At køre en pca i R
-
-**3)** At bestemme, hvor mange komponenter vi skal beholde
-
-**4)** At udregne og rotere factor loadings for at fortolke vores komponenter
-
-
-Vi har altså lært at bruge PCA til at reducere dimensionaliteten i vores korrelationsmatrice og udlede et grundlæggende antal variable, som opsummerer den fælles variation i de originale variable! 
-
---
-
-*I dag skal vi bruge de nye variable, som vi har udledt i videre analyser!*
 
 
 
 
 ---
-# Forudsagte factor scores
+# PCA trin for trin
+
+**5) Fortolk indholdet i de komponenter I har beholdt med factor loadings**
+
+*For at lette fortolkningen og lettere kunne skelne mellem komponenter roterer vi factor loadings for at opnå "simple structure".* 
+
+
+Vi bruger enten orthogonal (vinkelret) rotation:
+
+```r
+varimax(pca$factor_loadings[,1:2])
+```
+
+Eller oblique, som tillader komopnenter at korrelere
+
+```r
+Promax(pca$factor_loadings[,1:2])
+```
+
+---
+# PCA trin for trin
+
+.center[
+&lt;img src="Rotation_viz_loadings.gif" width="85%" /&gt;
+.center[.backgrnote[*af Jonas Strøyberg Jensen*]]
+]
+
+---
+# PCA trin for trin
+
+**6) Udtræk jeres nye variable og brug dem i analyser (temaet i dag)**
+
+
+
 
 Når man har afsluttet sin PCA og nået frem til fortolkelige komponenter, så kan man arbejde videre med disse komponenter. På baggrund af en PCA kan man nemlig få komponenterne ud!
 
-`\(\rightarrow\)` ***forudsagte factor scores***
+
+.pull-right[![](https://media.sproutsocial.com/uploads/2017/03/How-to-Build-a-Social-Media-Marketing-Funnel-That-Converts.png)]
+
 
 --
+.pull-left[
+`\(\rightarrow\)` *forudsagte factor scores: hver observations placering på den/de nye skala(er)*
+]
+
+---
+# Forudsagte factor scores
 
 Der findes forskellige måder at genere factor scores som variable i sit datasæt. Vi bruger ”regressionsmetoden”, som er default i psych-pakken:
 
@@ -301,8 +339,7 @@ Her bruger man principperne i lineær regression til ”back out” vægtene for
 ---
 # Forudsagte factor scores
 
-Bemærk at psych standardiserer factor scores til en middelværdi på 0 og sd på 1:
-
+Bemærk at psych standardiserer factor scores til en middelværdi på 0 og sd på 1. Det betyder, at de nye variables skalaer er i standardafvigelser! 
 
 ```r
 describe(data$PC1)
@@ -312,6 +349,10 @@ describe(data$PC1)
 ##    vars    n mean sd median trimmed  mad   min  max range skew kurtosis   se
 ## X1    1 1593    0  1   -0.1   -0.05 0.97 -2.29 3.69  5.98 0.53     0.15 0.03
 ```
+--
+
+Det betyder, at en stigning på 1 = en stiging på 1 standardafvigelse.
+
 --
 
 *Det er ikke alle programmer/pakker der gør det, så det kan godt betale sig at være opmærksom på, at man nogle gange selv skal standardisere.*
@@ -343,8 +384,11 @@ Vi har været igennem følgende trin nu
 ---
 # Program for resten af dagen:
 
-- Arbejde videre med øvelse 1 "Børn er forskellige" eller 2 "Tolerance", udregn forudsagte factor scores og brug dem i videre analyser
+Pause
 
+--
+
+- Arbejde videre med øvelse 1 "Børn er forskellige"
 --
 
 Pause
@@ -352,6 +396,8 @@ Pause
 --
 
 - Lave en PCA fra start til slut. Her kan i vælge imellem:
+
+  + Tolerance, please!
 
   + Hvis din nabo var en...
   
@@ -373,21 +419,56 @@ Pause(r)
 ---
 # Hvordan kunne en PCA-opgave se ud?
 
-***Eksempel på spørgsmål:*** Er der nationale forskelle i institutionel tillid?
+.pull-left[
+**LCA** gruppérer **personer** i nogle få grundlæggende *typer/klasser* 
+&lt;break&gt;
+![](https://www.umass.edu/family/sites/default/files/events/latent_class_analysis_image.png)
 
-**1)** Operationalisering: Hvilke spørgsmål måler institutionel tillid?
+- Hvilke typer af...
+- Hvor mange typer af...
+- Hvad karakteriserer disse typer...
+]
 
-**2** Argumenter for brugen af PCA: Tillid er svært at måle med en enkel variabel. PCA kan hjælpe os med at skabe nye variable, der opsummerer den fælles variation på tværs af vores udvalgte variable. Samtidig kan vi bruge metoden til at vurdere, om der er en eller flere dimensioner på spil og trække de relevante ud!
+--
+.pull-right[
+**PCA** grupperer **variable** der måler det samme og omgrupperer dem til variable/skalaer, der opsummerer variationen på tværs af de gamle variable
 
-- Redegør for de overordnede principper i PCA i generelle termer. Orienter jer f.eks. i Kline 1994:kap.1+3
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR41fy74OEaqmKaGalRK5yIihM9hFBfIUv27A&amp;usqp=CAU)
+- Danner skalaer for svært observerbare fænomener
+- Tænk kontinuert
+- Er der nationale/sociale/demografiske forskelle i...
 
-- I skal ikke udlede nogle komponenter i hånden. I skal bare redegøre for de grundlæggende principper i, at PCA kan udlede nye komponenter ved at dekomponere en korrelationsmatricen, og beskrive overordnet, hvordan den går til værks
+]
 
 
 ---
 # Hvordan kunne en PCA-opgave se ud?
 
-**3) Undersøg om korrelationsmatricen mellem jeres udvalgte variable er faktorabel**
+***Eksempel på spørgsmål:*** Er der nationale forskelle i institutionel tillid?
+
+--
+
+**1)** Operationalisering: Hvilke spørgsmål måler institutionel tillid?
+
+--
+
+**2** Argumenter for brugen af PCA: Tillid er svært at observere og måle direkte med en enkel variabel. PCA kan hjælpe os med at skabe nye variable, der opsummerer den fælles variation på tværs af vores udvalgte variable. Samtidig kan vi bruge metoden til at vurdere, om der er en eller flere dimensioner på spil og trække de relevante ud!
+
+--
+
+- Redegør for de overordnede principper i PCA i generelle termer. Orienter jer f.eks. i Kline 1994:kap.1+3
+
+--
+
+- I skal ikke udlede noget i hånden eller gå ind i matematikken. I skal bare redegøre for de grundlæggende principper i, at PCA kan udlede nye komponenter ved at dekomponere en korrelationsmatrice og beskrive overordnet, hvordan den går til værks
+
+
+---
+# Hvordan kunne en PCA-opgave se ud?
+
+**3) Undersøg samvariationen mellem jeres variable - er korrelationsmatricen faktorabel?**
+
+--
 
 Redergør for og sammenlign de tre kriterier:
 
@@ -397,12 +478,16 @@ Redergør for og sammenlign de tre kriterier:
 
 - Bartlett’s (sfæriske) test
 
+--
+
 *Men husk at bruge dem heuristisk - jeres teoretiske argumenter skal også informere jeres valg*
 
 ---
 # Hvordan kunne en PCA-opgave se ud?
 
 **4) Kør PCA og bestem antal komponenter**
+
+--
 
 Argumenter for jeres valg på baggrund af de tre kriterier (og beskriv logikken bag dem):
 
@@ -412,12 +497,16 @@ Argumenter for jeres valg på baggrund af de tre kriterier (og beskriv logikken 
 
 - Parallel analysis (de facto standard i dag).
 
+--
+
 Hvis I er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at gå videre med et par forskellige. I skal vælge det antal, som giver de tydeligste komponenter, dvs. dem hvor I bedst kan skelne mellem dem, når I fortolker factor loadings. 
 
 ---
 # Hvordan kunne en PCA-opgave se ud?
 
 **5) Beskriv de komponenter, som I beholder**
+
+--
 
 - Udregn og roter factor loadings
 
@@ -434,15 +523,35 @@ Hvis I er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at g
 
 **6) Udregn forudsagte factor scores og brug variablen(e) i videre analyser**
 
+--
+
 - Husk at factor scores er standardiserede til middelværdi 0 og standardafvigelse 1. Komponenternes skala er altså i standardafvigelser!
 
 - Det er oplagt at køre regressionsanalyse med jeres nye komponenter og finde ud af, om der f.eks. er nationale/socioøkonomiske/demografiske forskelle
 
-*No need to overdo et og køre fuld IV-estimation eller RD. En simpel multipel regressionsanalyse er rigeligt. Læringsmålet i faget er LCA og PCA, ikke andre fancy metoder!*
+--
+
+*No need to overdo it og køre fuld IV-estimation eller RD. En simpel multipel regressionsanalyse er rigeligt. Læringsmålet i faget er LCA og PCA, ikke andre fancy metoder!*
 
 ---
+# Ekstra huskeregler til PCA
+
+- PCA kan ikke håndtere missingværdier (laver listwise deletion). Dvs. der må ikke være missing på nogle af jeres manifeste variable.
+
+- Jeres manifeste variable skal have samme skala. Forestil jer at sammenligne DKK og Euro - hvad ville PCA vægte højest? Det kan dog fikses ved at aktivere "scale-argumentet" i **`prcomp()`** så variablene standardiseres på forhånd. Hold jer til disse specifikationer:
 
 
+```r
+pca &lt;- prcomp(var, center = TRUE, scale = TRUE)
+```
+
+- Hvis jeres komponenter ender med at loade negativt så en stigning på skalaen f.eks. betyder *mindre tillid* fremfor *mere* kan I bare vende skalaen:
+
+
+```r
+data$PC1 &lt;-max(data$PC1, na.rm = TRUE) - data$PC1
+```
+... det svarer bare til at ændre fortegnet og har kun fortolkningsmæssig betydning. 
 
 
     </textarea>
