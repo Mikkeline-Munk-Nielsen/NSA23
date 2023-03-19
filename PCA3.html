@@ -545,11 +545,11 @@ Hvis I er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at g
 pca &lt;- prcomp(var, center = TRUE, scale = TRUE)
 ```
 
-- Hvis jeres komponenter ender med at loade negativt så en stigning på skalaen f.eks. betyder *mindre tillid* fremfor *mere* kan I bare vende skalaen:
+- Hvis jeres komponenter ender med at loade negativt så I får en skala, der f.eks. måler *mistillid* fremfor *tillid* kan I vende skalaen:
 
 
 ```r
-data$PC1 &lt;-max(data$PC1, na.rm = TRUE) - data$PC1
+data$PC1 &lt;-data$PC1*-1
 ```
 ... det svarer bare til at ændre fortegnet og har kun fortolkningsmæssig betydning. 
 
