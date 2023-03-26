@@ -740,17 +740,16 @@ pca_obli$structure &lt;- pca_obli$loadings %*% pca_obli$Phi
 #Rotationsmetoder
 
 
-Rotationsteknikken afgøres dels af teoretiske overvejelser *(forventer vi at komponenterne korrelerer?)* og dels ved sammenligning af de to forskellige løsninger. 
+Rotationsteknikken afgøres først og fremmest af teoretiske overvejelser, dvs. *forventer vi at komponenterne korrelerer?*. Hvis man er i tvivl kan man orientere sig efter:
 
-I kan orientere jer efter:
-
---
-
-- *Hvilken giver bedst simpel structure?* 
 
 --
 
 - *Ser komponenterne ud til at være korrelerede (undersøg factor correlation matrix)?*
+
+--
+
+- *Hvilken giver bedst simpel structure?* 
 
 --
 
@@ -760,7 +759,7 @@ I kan orientere jer efter:
 
 --
 
-- Anbefalingen er at rotere løsningen med signifikante komponenter.
+- Anbefalingen er at rotere løsningen med signifikante komponenter, dvs. kun de komponenter, som I har valgt at beholde.
 
 
 ---

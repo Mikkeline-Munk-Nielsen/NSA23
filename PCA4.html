@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PCA III</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="v. Mikkeline Munk Nielsen" />
+    <script src="libs/header-attrs-2.19/header-attrs.js"></script>
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <link href="libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# PCA III
+]
+.subtitle[
+## Nyere statistiske analysestrategier F23
+]
+.author[
+### v. Mikkeline Munk Nielsen
+]
+
+---
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 220px;
+height: 256px;
+z-index: 0;
+background-image: url(https://designguide.ku.dk/download/co-branding/ku_co_uk_h.jpg);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+# Program for i dag
+
+Videregående eksplorativ PCA
+
+- Commen factor model: factors vs. components
+
+pause
+
+- PCA med ikke-kontinuerte items
+
+- Chronbachs alpha
+
+pause
+
+- workshop med eksamensdata
+
+---
+# Common factor model
+
+I PCA har vi udledt komponenter (*principal components*), men det er vigtigt at være opmærksom på, at litteraturen skelner mellem *faktorer* og *komponenter*
+
+
+
+
+- **Komponenter** er resultatet af en iterativ statistisk metode (PCA), der dekomponerer en korrelationsmatrix.
+
+
+- **Faktorer** er hypotetiske konstrukter ”out there”, som vi forsøger at måle (CFM)
+
+
+Pett et al. + Hansen (2017) laver denne skelnen.
+
+---
+# Common factor model
+
+
+”Common factor model” referer til den klasse af EFA, som arbejder med faktorer.
+
+
+- Den centrale forskel på CFM og PCA er, at CFM antager, at der er ”målefejl” i vores data.
+
+
+- Klassen af CFM-modeller forsøger dermed eksplicit at korrigere for målefejlen.
+
+
+Med målefejl mener vi her det faktum, at de latente faktorer ikke kan forklare al variation i korrelationsmatricen. Det virker jo yderst rimeligt!
+
+PCA, derimod, ”antager”, at man kan forklare al variation, også den, der opstår pga. målefejl eller sampling støj.
+
+---
+# Common factor model
+
+.center[
+&lt;img src="Målemodel_målefejl_1.png" width="750px" /&gt;
+]
+
+---
+# Common factor model
+
+.center[
+&lt;img src="Målemodel_målefejl_2.png" width="750px" /&gt;
+]
+
+---
+# Common factor model
+
+CFM deler variansen i en korrelationsmatrice op i tre dele:
+
+**1** Common variance: Andelen af variansen, der kan forklares af faktorer
+
+
+**2** Specific variance: Den varians som vedrører en enkelt indikator (fx hvis indikatoren er en dårlig indikator).
+
+
+**3** Error variance: Tilfældige målefejl (ved den enkelte indikator).
+
+
+---
+# Common factor model
+
+*I PCA skelner man ikke mellem specific variance og error variance!*
+
+
+- Specific og error variance udgør tilsammen, det man kalder den *unikke varians* (der er defineret som communality minus 1), men terminologien er mindre væsentlig her.
+
+
+- Unik varians er den varians, som ikke kan forklares af faktorer så at sige.
+
+---
+# Common factor model
+
+Der findes flere CFM metoder - den primære er dog *principal factoring* eller *principal axis factoring*. 
+
+- **Princip:** Principal factoring forsøger at “tage målefejlen i korrelationsmatricen ud” og så køre en PCA på den opdaterede matrix.
+
+- **Praksis:** Konkret erstatter man diagonalen i korrelationsmatricen med estimater af communality, som kan estimeres på flere måder…
+
+Communality er defineret som 1 minus uniqueness, men terminologien er mindre vigtig her.
+
+---
+# Common factor model
+
+
+Her er den korrelationsmatrice, som vi har kigget på som eksempel i undervisningen:
+
+```
+##              parliament legal_system    police politicians   parties
+## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
+## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
+## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
+## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
+## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
+```
+
+--
+
+Her vil I lægge mærke til, at diagonalen har alle værdien 1 (dvs. communality = 1)
+
+--
+
+Pointen i CFM er, at estimaterne af communality skal gerne afspejle målefejlen...
+
+---
+# Common factor model
+
+Den mest udbredte metode er at bruge squared multiple correlations ( `\(R^2\)` ) fra regressioner af hver indikator variabel på alle andre indikatorvariable.
+
+.pull-left[
+Squared multiple correlations er som estimat den nedre grænse for communality, dvs. det er i teorien et bud på målefejlens maksimale betydning.
+
+
+
+En udvidelse er såkaldt iterated principal factoring.
+Metoden starter på samme vis som principal factoring, men her opdaterer man løbende communalities med estimater, der fitter bedre.
+Er i princippet at foretrække, men kan ikke altid ”konvergere” (Heywood case).
+]
+
+.pull-right[
+
+&lt;img src="https://vitalflux.com/wp-content/uploads/2019/07/R-squared-formula-linear-regression-model.jpg" width="100%" /&gt;
+]
+
+---
+# Common factor model
+
+- Kline (1994) citerer en kilde, som viser, at PCA og CFM ofte vil give samme resultat, når der er mange indikatorer.
+
+- Intuitionen må være, at med mange indikatorer er den gennemsnitlige målefejl lav (altså, det er godt med mange målinger af det samme).
+
+---
+# Polychorisk PCA
+
+
+Polykorisk PCA er en udvidelse (eller måske rettere en *specificering*) af PCA, som I kender den. 
+
+- PCA antager i udgangspunktet, at indikatorvariable er kontinuerte (eller intervalskalerede).
+
+- Men vi arbejder ofte med binære eller ordinale (Likert-type) indikatorer i sociologien…
+
+
+&lt;img src="Likert_scale.png" width="100%" /&gt;
+
+.center[***What to do?***]
+
+---
+# Polykorisk PCA
+
+- ”Løsningen” er at bruge en anden form for korrelationskoefficient end Pearson’s product-moment correlation.
+
+-  Korrelationer kendes som tetrakoriske (for binære variable) og polykoriske (for ordinale variable).
+
+--
+
+Antagelsen bag den polykoriske korrelation er, at der nedenunder den dikotome eller ordinale indikator ligger en kontinuert variabel.
+
+Vi kan ikke se denne kontinuerte variabel, men ved hjælp af statistiske regler kan man udregne korrelationen mellem de variabler, der ligger nedenunder de diskrete variable.
+
+
+---
+# Polychorisk PCA
+
+- For de nørdede: Har man både kontinuerte og diskrete indikatorvariable, så kan man også nemt håndtere det.
+I så fald snakker man om polyserielle korrelationer
+
+--
+
+- I praksis er forskellen bare, at PCA'en vil køre en normal PCA på en korrelationsmatrice med *polykoriske korrelationer. *
+
+--
+
+
+**OBS! Man skal ikke gøre dette til eksamen**, men det er vigtigt at vide, at polykoriske korrelationer i princippet er ”mere rigtigt”. I praksis er forskellen bare, at PCA'en vil køre en normal PCA på en korrelationsmatrice med *polykoriske korrelationer. *
+
+--
+
+*Hvis man har lyst til at prøve kræfter med en polykorisk PCA ligger der en øvelse med en egnet R-pakke på absalon*
+
+---
+# Chronbachs alpha
+
+Chronbachs alpha er et mål man bruger til at vurdere en sumskalas såkaldte interne reliabilitet, dvs. et mål for, hvor meget målefejl, der er i ens skala.
+
+Alfa måler ikke dimensionalitet eller validitet, men reliabilitet, forudsat at der er én dimension i items.
+
+
+
+---
+# Chronbachs alpha
+
+```r
+(ESS_DK %&gt;% 
+    dplyr::select(parliament, legal_system, police, politicians, 
+                  parties) %&gt;% 
+    cronbach.alpha())
+```
+
+```
+## 
+## Cronbach's alpha for the '.' data-set
+## 
+## Items: 5
+## Sample units: 1593
+## alpha: 0.859
+```
+.pull-left[
+Vi fortolker alpha-værdien ud fra følgende:
+]
+.pull-right[
+&lt;img src="Chronbach_alpha.jpg" width="75%" /&gt;
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLanguage": "r",
+"highlightStyle": "zenburn",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"self_contained": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

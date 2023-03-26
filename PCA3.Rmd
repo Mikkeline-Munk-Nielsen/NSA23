@@ -249,7 +249,11 @@ cortest.bartlett(matrice, n=1406) # KMO funktion, argument n= antal observatione
 ```
 
 
+- Factor loadings er korrelationen mellem de manifeste variable og de udledte komponenter. 
 
+- Vi fortolker de nye komponenter ved at undersøge, hvilke af de manifeste variable komponenter har "høje loadings" på
+
+- Det kan dog være vanskelige at skelne mellem komponenterne på rå faktor loadings. Derfor roterer vi dem!
 
 
 ---
@@ -271,7 +275,7 @@ Promax(pca$factor_loadings[,1:2])
 ```
 
 ---
-# PCA trin for trin
+# Rotation og simple structure
 
 .center[
 ```{r, echo = FALSE, out.width='85%'}
@@ -335,7 +339,7 @@ colnames(pca_obli$structure) <- c("PC1", "PC2")
 
 ```
 
-Når man har afsluttet sin PCA og nået frem til fortolkelige komponenter, så kan man arbejde videre med disse komponenter. På baggrund af en PCA kan man nemlig få komponenterne ud!
+Når man har afsluttet sin PCA og nået frem til fortolkelige komponenter, så kan man arbejde videre med disse komponenter. På baggrund af en PCA kan man nemlig få komponenterne ud som nye variable!
 
 
 .pull-right[![](https://media.sproutsocial.com/uploads/2017/03/How-to-Build-a-Social-Media-Marketing-Funnel-That-Converts.png)]
@@ -343,7 +347,8 @@ Når man har afsluttet sin PCA og nået frem til fortolkelige komponenter, så k
 
 --
 .pull-left[
-$\rightarrow$ *forudsagte factor scores: hver observations placering på den/de nye skala(er)*
+
+$\rightarrow$ For at udtrække komponenterne udregner vi *forudsagte factor scores*, dvs. hver observations placering på den/de nye skala(er)
 ]
 
 ---
@@ -368,7 +373,7 @@ Her bruger man principperne i lineær regression til ”back out” vægtene for
 ---
 # Forudsagte factor scores
 
-Bemærk at psych standardiserer factor scores til en middelværdi på 0 og sd på 1. Det betyder, at de nye variables skalaer er i standardafvigelser! 
+Den skala PCA producerer er ikke sammenlignelig med den originale skala på de manifeste variable. Derfor er det standardpraksis at standardisere de variable, som man udleder af PCA. Bemærk at psych automatisk standardiserer factor scores til en middelværdi på 0 og sd på 1. Det betyder, at de nye variables skalaer er i standardafvigelser! 
 ```{r echo = T}
 describe(data$PC1)
 ```
@@ -379,6 +384,7 @@ Det betyder, at en stigning på 1 = en stiging på 1 standardafvigelse.
 --
 
 *Det er ikke alle programmer/pakker der gør det, så det kan godt betale sig at være opmærksom på, at man nogle gange selv skal standardisere.*
+
 
 --
 
@@ -475,7 +481,7 @@ Pause(r)
 
 --
 
-**2** Argumenter for brugen af PCA: Tillid er svært at observere og måle direkte med en enkel variabel. PCA kan hjælpe os med at skabe nye variable, der opsummerer den fælles variation på tværs af vores udvalgte variable. Samtidig kan vi bruge metoden til at vurdere, om der er en eller flere dimensioner på spil og trække de relevante ud!
+**2** Argumenter for brugen af PCA: Tillid er svært at observere og måle direkte med en enkel variabel. PCA kan hjælpe os med at skabe nye variable, der opsummerer den fælles variation på tværs af vores udvalgte variable. Samtidig kan vi bruge metoden til at vurdere, om der er flere dimensioner på spil og trække de relevante ud!
 
 --
 
@@ -483,7 +489,7 @@ Pause(r)
 
 --
 
-- I skal ikke udlede noget i hånden eller gå ind i matematikken. I skal bare redegøre for de grundlæggende principper i, at PCA kan udlede nye komponenter ved at dekomponere en korrelationsmatrice og beskrive overordnet, hvordan den går til værks
+- I skal ikke udlede noget i hånden eller gå ind i matematikken. I skal bare redegøre for de grundlæggende principper i, at PCA kan udlede nye komponenter ved at dekomponere en korrelationsmatrice og beskrive overordnet, hvordan den går til værks.
 
 
 ---
@@ -500,6 +506,8 @@ Redergør for og sammenlign de tre kriterier:
 - Kaiser-Meyer-Olkin test (KMO)
 
 - Bartlett’s (sfæriske) test
+
+Dette er tre metoder, der kan hjælpe jer med at vurdere, om der er empirisk grundlag for at antage, at jeres manifeste variable måler det samme latente fænomen.
 
 --
 
@@ -522,7 +530,11 @@ Argumenter for jeres valg på baggrund af de tre kriterier (og beskriv logikken 
 
 --
 
-Hvis I er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at gå videre med et par forskellige. I skal vælge det antal, som giver de tydeligste komponenter, dvs. dem hvor I bedst kan skelne mellem dem, når I fortolker factor loadings. 
+Der er en lærings- og pensummæssig pointe i at sammenligne de tre metoder, men parallelanalysen er standard procedure i dag. 
+
+--
+
+Hvis I stadig er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at gå videre med et par forskellige. I skal vælge det antal, som giver de mest meningsfulde komponenter, dvs. dem hvor I bedst kan skelne mellem dem, når I fortolker factor loadings. 
 
 ---
 # Hvordan kunne en PCA-opgave se ud?
@@ -533,9 +545,9 @@ Hvis I er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at g
 
 - Udregn og roter factor loadings
 
-- Argumenter først og fremmest for, hvilken rotationsmetode i foretrækker
+- Beskriv hvorfor vi roterer og redegør for simple structure kriterierne (ex. Kline 1994:64 fl.)
 
-- Undersøg orthogonal og oblique rotationer og argumenter for, hvilken en der er bedst i jeres tilfælde
+- Argumenter for, hvilken rotationsmetode i foretrækker (orthogonal vs. oblique - forventer I at komponenterne vil korrelere?)
 
 - Navngiv jeres komponenter meningsfuldt (f.eks. PC1 "Tillid til politiske institutioner" og PC2 "Tillid til retssystemet")
 
@@ -561,7 +573,7 @@ Hvis I er i tvivl om, hvor mange komponenter, som I skal beholde, så prøv at g
 
 - PCA kan ikke håndtere missingværdier (laver listwise deletion). Dvs. der må ikke være missing på nogle af jeres manifeste variable.
 
-- Jeres manifeste variable skal have samme skala. Forestil jer at sammenligne DKK og Euro - hvad ville PCA vægte højest? Det kan dog fikses ved at aktivere "scale-argumentet" i **`prcomp()`** så variablene standardiseres på forhånd. Hold jer til disse specifikationer:
+- Jeres manifeste variable skal som udgangspunkt have samme skala. Forestil jer at sammenligne DKK og Euro - hvad ville PCA vægte højest? Det kan dog fikses ved at aktivere "scale-argumentet" i **`prcomp()`** så variablene standardiseres på forhånd. Hold jer til disse specifikationer:
 
 ```{r echo = T}
 pca <- prcomp(var, center = TRUE, scale = TRUE)
