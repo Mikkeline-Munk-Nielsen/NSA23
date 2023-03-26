@@ -321,7 +321,7 @@ CFA antager på baggrund af teori, hvad de latente variable *bør* måle. *Er* m
 
 **Fokus i dette kursus er på PCA!**
 
-Hvorfor? Fordi kurset handler om data-mining, og fordi det er langt mere praktisk og intuitivt end CFA. Hvis vi får tid berører vi overfladisk CFA, når vi ser på noget af det videregående.
+Hvorfor? Fordi kurset handler om data-mining, og fordi det er langt mere praktisk og intuitivt end CFA.
 
 --
 
@@ -461,7 +461,7 @@ knitr::include_graphics('https://i.stack.imgur.com/Q7HIP.gif')
 
 - Tingene bliver mere uoverskuelige, når vi har at gøre med flere dimensioner...
 
-- Så snart vi kommer over tre dimensioer(variable i matricen), kan vi ikke længere tegne det.
+- Så snart vi kommer over tre dimensioner (variable i matricen), kan vi ikke længere tegne det.
 
 - Men PCA er bygget til at finde mønstre i multidimensionelle rum!
 
@@ -565,7 +565,7 @@ ESS_DK <- ESS_DK %>%
   drop_na()
 
 ```
-Vi kan start med at undersøge korrelationsmatricen:
+Vi kan starte med at undersøge korrelationsmatricen:
 ```{r echo=FALSE}
 
 (ESS_DK %>% 
@@ -1266,9 +1266,8 @@ Nogle gange er der ikke et tydeligt knæk, hvilket lægger op til fortolkning ..
   
 --  
   
-- Man kører en PCA på de simulerede data og laver et scree-plot.Herefter kører man en PCA på de ”ægte” data, laver et scree-plot, og ”lægger” plottet ned over det simulerede plot.
+- Man kører en PCA på de simulerede data og laver et scree-plot. Herefter kører man en PCA på de ”ægte” data, laver et scree-plot, og ”lægger” plottet ned over det simulerede plot.
 
---
 
 - Antallet af signifikante komponenter er de komponenter, der ligger over skæringspunktet mellem de to kurver.
 

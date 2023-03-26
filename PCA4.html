@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>PCA III</title>
+    <title>PCA IV</title>
     <meta charset="utf-8" />
     <meta name="author" content="v. Mikkeline Munk Nielsen" />
     <script src="libs/header-attrs-2.19/header-attrs.js"></script>
@@ -17,7 +17,7 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# PCA III
+# PCA IV
 ]
 .subtitle[
 ## Nyere statistiske analysestrategier F23
@@ -65,52 +65,431 @@ top:1em;right:1em;
 
 # Program for i dag
 
-Videregående eksplorativ PCA
+Recap
 
-- Commen factor model: factors vs. components
-
-pause
+Videregående PCA
 
 - PCA med ikke-kontinuerte items
 
+- Commen factor model: factors vs. components
+
 - Chronbachs alpha
 
-pause
+Workshop med eksamensdata (fra kl. 15)
 
-- workshop med eksamensdata
+---
+# Recap
+
+Faktoranalyse (FA) refererer til en vifte af metoder, der forsøger at reducere variansen i en korrelationsmatrice med mange variable til få, grundlæggende variable.
+
+--
+
+Hvad kan vi bruge det til?
+
+--
+
+**1)** Måle uobserverbare eller svært-målbare fænomener (fx tillid, solidaritet, intelligens, racisme, kulturel kapital) ved hjælp af et sæt indikatorer (/items/variable)
+
+--
+
+**2)** Reducere stort antal variable til færre (eller bare en) komponenter/faktorer (data-reduktion)
+
+--
+
+**3)** Kan hjælpe med at identificere om et konstrukt/begreb er en- eller flerdimensionelt
+
+---
+# Recap
+
+Hvor LCA er en personorienteret tilgang til data-mining, så er faktoranalyser variabelorienterede. 
+
+Det handler om at gruppere indikatorvariable på baggrund af, om de ”måler det samme” og derfor ”ligner hinanden”.
+
+Ligesom LCA handler om at gruppere personer på baggrund af, om personerne ligner hinanden…
+
+
+.pull-left[
+.center[**LCA**]
+![](https://www.umass.edu/family/sites/default/files/events/latent_class_analysis_image.png)
+]
+
+
+.pull-right[
+.center[**PCA**]
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR41fy74OEaqmKaGalRK5yIihM9hFBfIUv27A&amp;usqp=CAU)
+]
+
+
+---
+# Recap
+
+- PCA er en statistisk metode, der transformerer en korrelationsmatrix med mange indikatorvariable til relativt få variable, der er ukorrelerede med hinanden og som kan forklare den variation, som indikatorvariablene deler.
+PCA ”sorterer” i den variation, som en række manifeste indikatorer deler.
+
+--
+
+- PCA forsøger at ”mine” denne korrelationsmatrice ved at se, om alle korrelationer kan forklares af en (lineær) kombination af underliggende, ukorrelerede variable kaldet komponenter.
+
+
+--
+
+- Og bemærk… PCA er ikke modelbaseret – det er bare en iterativ statistisk metode, som dekomponerer korrelationsmatricer vha. ortogonale transformationer.
+
+---
+#Recap
+
+Det metodiske princip i PCA er følgende:
+
+**1)** Identificer den første komponent, der forklarer så meget fællesvariation som muligt i korrelationsmatricen.
+
+--
+
+**2)** Find da den anden komponent, der forklarer så meget som muligt af fællesvariation, der er tilbage i matricen efter man har trukket den første komponent ud!
+
+--
+
+**3)** Fortsæt som i punkt 2 indtil der ikke er mere fællesvariation at forklare.
+
+--
+
+
+*PCA er kendetegnet ved, at den fortsætter med at finde komponenter ind til al variation i korrelationsmatricen er forklaret.*
+
+--
+
+*Det betyder også, at PCA altid finder lige så mange komponenter, som der er indikatorvariable!*
+
+
+---
+# PCA i praksis, trin for trin
+
+**1)** Udvælg manifeste variable, som relaterer sig til det fænomen, som I er interesserede i at undersøge (operationalisering)
+
+--
+
+**2)** Vurdér om korrelationsmatricen mellem de manifeste variable er faktorabel
+
+--
+
+**3)** Kør en pca i R ved at bruge **`prcomp()`** - denne kommando dekomponerer korrelationsmatricen for jer og danner nye komponenter/variable
+
+--
+
+**4)** Beslut hvor mange komponenter, det er meningsfuldt at beholde (vi vil jo gerne nedbringe antallet af variable til nogle få, der opsummerer de gamle)
+
+--
+
+**5)** Udregn og rotér factor loadings for at fortolke indholdet i komponenterne (vælg enten orthogonal eller obliqe ud fra en teoretisk vurdering af, om i forventer at komponenterne vil korrelere) 
+
+--
+
+**6)** Udtræk jeres nye variable (ved at udregne factor scores) og brug dem i analyser
+
+---
+# PCA How to
+
+**1) Teori og variabeludvælgelse**
+
+Motivation: 
+
+- Hvilke variable tror jeg ”måler det samme”?
+
+- Eller: Består et begrebet af en eller to dimensioner?
+
+Udvælg indikatorer, som man med rimelighed vil forvente måler det, I gerne vil måle.
+Fx institutionel tillid – gennem indikatorer på holdningen til forskellige nationale og overnationale institutioner.
+
+---
+# PCA How to
+
+**2) Identificer antallet af komponenter**
+
+Litteraturen fremhæver tre selektionsregler:
+
+- Egenværdier &gt; 1 (Kaiser-Guttman kriteriet).
+
+- Cattell’s scree test (scree plot).
+
+- Parallel analysis (de facto standard i dag).
+
+Bemærk: Pett et al. fremhæver kun 1+2, da 3 er relativt ny. Hayton et al. (2004) beskriver meget fint 3.
+
+Parallelanalysen er standard i dag!
+
+---
+# PCA how to
+
+**2) Identificer antallet af komponenter**
+
+Samlet forklaringskraft: hvor meget forklarer antallet af fastholdte komponenter alt i alt?
+
+- Ofte vil en god PCA være kendetegnet ved, at de fastholdte komponenter forklarer en betydelig del af den samlede variation.
+
+- Man kan arbejde med tommelfingerregler her (se f.eks. Hansen 2017), men det kan variere meget.
+
+- Vores råd er, at man altid angiver i en analyse, hvor meget antallet af fastholdte komponenter forklarer alt i alt. Det giver læser en ide om, hvor stærk ”PCA-løsningen” er.
+
+
+---
+# PCA How to 
+**3) Fortolkning af komponenter**
+
+Vi fortolker vores komponenter med udgangspunkt i *factor loadings*. Definition: En factor loading er korrelationen mellem en komponent og en indikatorvariabel.
+
+- Formål: Factor loadings fastlægger fortolkningen af en komponent!
+
+- Factor loadings svarer til de betingede sandsynligheder i LCA (rho)…
+
+- Det anbefales, at man ikke fortolker på de rå factor loadings!
+Fortolkning af komponenter afhjælpes derimod i PCA af såkaldt ***rotation*** af de komponenter som man beholder.
+
+- Rotation + regler for simpel struktur afgør, hvordan PCA’ens resultater fortolkes…
+
+
+---
+# PCA How to 
+
+**3) Fortolkning af komponenter - rotationsmetoder**
+
+Formålet med rotation af faktorer er at opnå fortolkelige faktorer/komponenter, dvs. faktorer, hvor factor loadings relativt entydigt hjælper med at beskrive de latente variable.
+
+- Det handler om at opnå simple structure (Se Pett et al., s. 132ff).
+
+- Det minder meget om principperne for klassehomogenitet og -separation i LCA.
+
+
+Der findes mange rotationsmetoder, der hver især forsøger at opnå simple structure ud fra lidt forskellige kriterier. Den vigtige distinktion her er mellem ortogonale og oblique rotationer: 
+
+- Ortogonal rotation er, når vi roterer akserne (komponenterne), hvor akserne er ortogonale (vinkelrette) på hinanden (vi har brugt varimax)
+
+- Oblique rotation er, når vi tillader akserne (komponenterne) at være korreleret (vi har brugt oblimin)
+
+
+---
+# PCA How to
+
+**3) Fortolkning af komponenter - rotationsmetoder**
+
+Ved oblique rotation skelner man mellem:
+
+- Factor pattern matrix: Korrelationen mellem komponenten/faktoren og de manifeste variable, når man har ”kontrolleret for” korrelationen mellem komponenterne. Det er partielle regressionsbetakoefficienter/factor loadings.
+
+- Factor structure matrix: De rå korrelationer mellem den roterede komponent/faktor og de manifeste variable. De er ubetingede factor loadings.
+
+
+Hvilken matrix bruger man så til at fortolke sine resultater med?
+De facto standarden er at bruge factor structure matrix, da det minder om factor loadings i ortogonal rotation.
+
+Personligt er vi dog tilbøjelige til at sige, at begge er vigtige og siger noget forskelligt, men så på den anden side viser litteraturen, at de ofte giver samme resultat anyways...
+
+---
+# PCA How to
+
+**4) Forudsagte factor scores**
+
+Når man har afsluttet sin PCA og nået frem til fortolkelige komponenter, så kan man arbejde videre med disse komponenter.
+
+- På baggrund af en PCA kan man nemlig få faktorerne ud (ved at udregne forudsagte factor scores) 
+
+- Forudsagte factor scores er hver observation i datasættets placering på den nye skala
+
+- De nye skalaer er ikke sammenlignelige med skalaerne på de manifeste indikatorer/variable. Derfor er det standard praksis at standardisere PCA-variablene (middelværdi=0 og standardafvigelse=1). Så får vi skalaen i standardafvigelser!
+
+Dem kan man fx bruge i regressionsanalyser til at undersøge kønsforskelle i fx institutionel tillid. 
+
+---
+# Konklusion på PCA
+
+- PCA dekomponerer en korrelationsmatrix ud i nogle få, grundlæggende komponenter, der er ukorrelerede med hinanden.
+
+--
+
+- Antallet af komponenter fastlægges ud fra en parallel analysis (primær metode) samt eigenværdier &gt; 1 og evt. screeplot
+
+--
+
+- Løsningen roteres for at få fortolkelige komponenter – dvs. man fortolker komponenter ud fra roterede factor loadings (her vælger man mellem orthogonal og oblique rotation)
+
+--
+
+- Man kan få komponenterne ud og arbejde med dem i videre analyser.
+
+
+---
+# Videregående
+.center[
+&lt;img src="Nice_to_know.jpg" width="75%" /&gt;
+]
+---
+# Polychorisk PCA
+
+Polykorisk PCA er en udvidelse (eller måske rettere en *specificering*) af PCA, som I kender den. 
+
+--
+
+- PCA antager i udgangspunktet, at indikatorvariable er kontinuerte (eller intervalskalerede).
+
+--
+
+- Standard er derfor at køre PCA på en korrelationsmatrice med Pearson's *r*-korrelationer, dvs. korrelationer der forudsætter kontinuerte variable
+
+--
+
+- Men vi arbejder ofte med binære eller ordinale (Likert-type) indikatorer i sociologien…
+
+
+&lt;img src="Likert_scale.png" width="100%" /&gt;
+
+.center[***What to do?***]
+
+---
+# Polykorisk PCA
+
+
+”Løsningen” er at bruge en anden form for korrelationskoefficient end Pearson’s product-moment correlation.
+
+- Korrelationer kendes som **tetrakoriske** (for binære variable) og **polykoriske** (for ordinale variable).
+
+--
+
+- Antagelsen bag den polykoriske korrelation er, at der nedenunder den dikotome eller ordinale indikator ligger en kontinuert variabel.
+
+--
+
+- Vi kan ikke se denne kontinuerte variabel, men ved hjælp af statistiske regler kan man udregne korrelationen mellem de variabler, der ligger nedenunder de diskrete variable. 
+
+
+--
+
+- Det gør man ved at modellere de dikotome eller ordinalt skalerede variable som funktioner af latente kontinuerte variable. 
+
+
+---
+# Polychorisk PCA
+
+- For de nørdede: Har man både kontinuerte og diskrete indikatorvariable, så kan man også nemt håndtere det.
+I så fald snakker man om polyserielle korrelationer
+
+--
+
+- I praksis er forskellen bare, at PCA'en vil køre en normal PCA på en korrelationsmatrice med *polykoriske korrelationer. *
+
+--
+
+
+**OBS! Man skal ikke gøre dette til eksamen**, men det er vigtigt at vide, at polykoriske korrelationer i princippet er ”mere rigtigt”. 
+
+--
+
+I praksis er forskellen bare, at PCA'en vil køre en normal PCA på en korrelationsmatrice med *polykoriske/tetrakoriske/polyserielle korrelationer.*
+
+--
+
+*Hvis man har lyst til at prøve kræfter med en polykorisk PCA ligger der en øvelse med en egnet R-pakke på absalon*
+
 
 ---
 # Common factor model
 
 I PCA har vi udledt komponenter (*principal components*), men det er vigtigt at være opmærksom på, at litteraturen skelner mellem *faktorer* og *komponenter*
 
+--
 
 
+- **Komponenter** er simple lineære kombinationer af variable, det Kline (1994) kalder "real factors"
 
-- **Komponenter** er resultatet af en iterativ statistisk metode (PCA), der dekomponerer en korrelationsmatrix.
+--
+
+- **Faktorer** er hypotetiske konstrukter, som vi forsøger at estimere (CFM) ved brug af manifeste variable
 
 
-- **Faktorer** er hypotetiske konstrukter ”out there”, som vi forsøger at måle (CFM)
+Pett et al. + Hansen (2017) og Kline (1994) laver denne skelnen. I praksis er CFM dog bare PCA med et lille tvist...
+
+---
+# Common factor model
+
+Når vi skal udtrække komponenter/faktorer starter hele processen med et estimat af den totale varians i hvert item, som kan forklares af de faktorer/komponenter som vi skal til at udtrække. 
+
+--
+
+Den forklarede varians betegnes som ***communality*** og kan range fra 0-1
+
+--
+
+- Communality = 0 indikerer, at intet af variansen i et item kan forklares af de udtrukne komponenter
+- Communality = 1 indikerer, at al variansen i et item kan forklares
+
+--
+
+Disse estimater placeres i diagonalen af korrelationsmatricen, før man kører en PCA eller CFM. Disse to metoder giver dog to forskellige bud på, hvordan communaliteten estimeres. 
+
+---
+# Common factor model
+
+I arbejdet med faktoranalyser skelner man mellem tre typer af varians:
+
+--
+
+**1)** *Common variance* ( `\(h^2\)` ) representerer den andel af variansen, der deles mellem et set af indikatorer, som kan forklares af et sæt af common factors. Højt korrelerede variable deler meget varians.
+
+--
+
+**2)** *Specific variance* er varians, som er specifik for en bestemt variabel, og som ikke deles af de andre variable i korrelationsmatricen (men måske af andre variable, som er udeladt)
+
+--
+
+**3)** *Error variance* repræsenterer målefejl. Målefejl kan bl.a. vurderes ud fra chronbachs alpha, som vi kommer til lidt senere. 
+
+--
+
+PCA og CFM adskiller sig i forhold til, hvordan de forholder sig til *specific-* og *error variance*. Kombineret betegnes de ***unique variance*** defineret som `\(1-h^2\)`
 
 
-Pett et al. + Hansen (2017) laver denne skelnen.
+*(Pett et al. 2003:87ff)*
 
 ---
 # Common factor model
 
 
-”Common factor model” referer til den klasse af EFA, som arbejder med faktorer.
+PCA inkluderer alle tre typer af varians, når den udtrækker komponenter. Derfor har vi også set, at de komponenter vi udtrækker forklarer 100 % variationen i korrelationsmatricen!
+
+Den korrelationsmatricen som vi har kørt PCA på har derfor også har 1 i diagonalen:
 
 
-- Den centrale forskel på CFM og PCA er, at CFM antager, at der er ”målefejl” i vores data.
 
 
-- Klassen af CFM-modeller forsøger dermed eksplicit at korrigere for målefejlen.
+```
+##              parliament legal_system    police politicians   parties
+## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
+## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
+## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
+## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
+## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
+```
+
+Pett et al. (2003) beskriver, at en ulempe ved PCA netop er, at den ikke tager højde for unik varians - det bliver ikke "factored out". Det er denne udfordring, som CFM prøver at løse.
+---
+# Common factor model
 
 
-Med målefejl mener vi her det faktum, at de latente faktorer ikke kan forklare al variation i korrelationsmatricen. Det virker jo yderst rimeligt!
+***Common factor model*** referer til den klasse af EFA, som arbejder med faktorer.
 
-PCA, derimod, ”antager”, at man kan forklare al variation, også den, der opstår pga. målefejl eller sampling støj.
+
+- Den centrale forskel på CFM og PCA er, at CFM antager, at de latente faktorer ikke kan forklare al variation i korrelationsmatricen. Det virker jo yderst rimelig!
+
+- Derfor prøver CFM-modeller eksplicit at korrigere for dette ved at adskille common og unique variance
+
+--
+
+Faktorer er derfor ikke bare lineære kombinationer af items i korrelationsmatricen. De er hypotetiske faktorer, som vi estimerer på baggrund af den fælles varians blandt nogle items. 
+
+--
+
+Fordi CFM fokuserer på common variance vil de faktorer man udtrækker ikke forklare 100 % af variansen i korrelationsmatricen. 
+
+--
+
+A samme grund vil værdierne i diagonalen være mindre end 1. I stedet vil diagonalen erstattes af en reduceret communality, som først skal estimeres!
 
 ---
 # Common factor model
@@ -129,69 +508,19 @@ PCA, derimod, ”antager”, at man kan forklare al variation, også den, der op
 ---
 # Common factor model
 
-CFM deler variansen i en korrelationsmatrice op i tre dele:
-
-**1** Common variance: Andelen af variansen, der kan forklares af faktorer
-
-
-**2** Specific variance: Den varians som vedrører en enkelt indikator (fx hvis indikatoren er en dårlig indikator).
-
-
-**3** Error variance: Tilfældige målefejl (ved den enkelte indikator).
-
-
----
-# Common factor model
-
-*I PCA skelner man ikke mellem specific variance og error variance!*
-
-
-- Specific og error variance udgør tilsammen, det man kalder den *unikke varians* (der er defineret som communality minus 1), men terminologien er mindre væsentlig her.
-
-
-- Unik varians er den varians, som ikke kan forklares af faktorer så at sige.
-
----
-# Common factor model
-
 Der findes flere CFM metoder - den primære er dog *principal factoring* eller *principal axis factoring*. 
 
-- **Princip:** Principal factoring forsøger at “tage målefejlen i korrelationsmatricen ud” og så køre en PCA på den opdaterede matrix.
+- **Princip:** Principal factoring forsøger at “tage unik varians i korrelationsmatricen ud” og så køre en PCA på den opdaterede matrix.
 
-- **Praksis:** Konkret erstatter man diagonalen i korrelationsmatricen med estimater af communality, som kan estimeres på flere måder…
-
-Communality er defineret som 1 minus uniqueness, men terminologien er mindre vigtig her.
+- **Praksis:** Konkret erstatter man diagonalen i korrelationsmatricen med estimater af communality, som kan estimeres på flere måder (communality er defineret som 1 minus uniqueness)
 
 ---
 # Common factor model
 
-
-Her er den korrelationsmatrice, som vi har kigget på som eksempel i undervisningen:
-
-```
-##              parliament legal_system    police politicians   parties
-## parliament    1.0000000    0.5584236 0.3784972   0.7224152 0.6775825
-## legal_system  0.5584236    1.0000000 0.5763997   0.4839359 0.4645301
-## police        0.3784972    0.5763997 1.0000000   0.3742397 0.3602119
-## politicians   0.7224152    0.4839359 0.3742397   1.0000000 0.8380581
-## parties       0.6775825    0.4645301 0.3602119   0.8380581 1.0000000
-```
-
---
-
-Her vil I lægge mærke til, at diagonalen har alle værdien 1 (dvs. communality = 1)
-
---
-
-Pointen i CFM er, at estimaterne af communality skal gerne afspejle målefejlen...
-
----
-# Common factor model
-
-Den mest udbredte metode er at bruge squared multiple correlations ( `\(R^2\)` ) fra regressioner af hver indikator variabel på alle andre indikatorvariable.
+Principal axis factoring bruge squared multiple correlations ( `\(R^2\)` ) fra regressioner af hver indikator variabel på alle andre indikatorvariable.
 
 .pull-left[
-Squared multiple correlations er som estimat den nedre grænse for communality, dvs. det er i teorien et bud på målefejlens maksimale betydning.
+Squared multiple correlations er som estimat den nedre grænse for communality, dvs. det er i teorien et bud på den unikke varians' maksimale betydning.
 
 
 
@@ -208,91 +537,131 @@ Er i princippet at foretrække, men kan ikke altid ”konvergere” (Heywood cas
 ---
 # Common factor model
 
+
+- Når vi siger, at CFM bare er en PCA med et lille tvist er "tvistet" altså, at man kører en PCA på en korrigeret korrelationsmatricen, der har reducerede estimater af communalitet i diagonalen. 
+
+--
+
 - Kline (1994) citerer en kilde, som viser, at PCA og CFM ofte vil give samme resultat, når der er mange indikatorer.
+
+--
 
 - Intuitionen må være, at med mange indikatorer er den gennemsnitlige målefejl lav (altså, det er godt med mange målinger af det samme).
 
----
-# Polychorisk PCA
+--
 
+Selvom der i praksis ofte ikke er den store forskel, er det vigtigt at I forstår skelnen mellem komponenter og faktorer. De to ting bygger på forskellige antagelser, og er principielt set ikke det samme. 
 
-Polykorisk PCA er en udvidelse (eller måske rettere en *specificering*) af PCA, som I kender den. 
-
-- PCA antager i udgangspunktet, at indikatorvariable er kontinuerte (eller intervalskalerede).
-
-- Men vi arbejder ofte med binære eller ordinale (Likert-type) indikatorer i sociologien…
-
-
-&lt;img src="Likert_scale.png" width="100%" /&gt;
-
-.center[***What to do?***]
+$$ Components \neq Factors$$
 
 ---
-# Polykorisk PCA
+# Skalakonstruktion
 
-- ”Løsningen” er at bruge en anden form for korrelationskoefficient end Pearson’s product-moment correlation.
+Et formål med faktoranalyse er bl.a. at danne skalaer, der ud fra en masse indikatorer gerne skulle ”måle” et fænomen af interesse.
 
--  Korrelationer kendes som tetrakoriske (for binære variable) og polykoriske (for ordinale variable).
+
+Fordelen ved at bruge PCA/CFM til skalakonstruktion er, at man kan vurdere, om der er én eller flere dimensioner i indikatorerne.
+
+- I PCA har vi brugt de forudsagte factor scores som mål for latente fænomener eller konstrukter.
 
 --
 
-Antagelsen bag den polykoriske korrelation er, at der nedenunder den dikotome eller ordinale indikator ligger en kontinuert variabel.
+- Det fungerer ofte fint og betyder egentlig bare, at skalaen/indekset, man danner ud fra sin PCA/EFA, er en vægtet sum af indikatorerne. Vægtene siger noget om, hvor stor indflydelse hvert item skal have (groft sagt).
 
-Vi kan ikke se denne kontinuerte variabel, men ved hjælp af statistiske regler kan man udregne korrelationen mellem de variabler, der ligger nedenunder de diskrete variable.
+`$$y_i = \beta_{1}I_{1i} + \beta_{2}I_{2i} + ... + \beta_{k}I_{ki}$$`
 
+*(PCA producerer nye komponenter/variable, som man kan tænke på som `\(y_i\)` i modellen ovenfor. Disse komponenter konstrueres på baggrund af en vægtet sumskala af vores indikatorvariable (de ti spørgsmål). `\(\beta\)`-værdierne indikerer vægtene for hvert item)*
 
 ---
-# Polychorisk PCA
+# Skalakonstruktion
 
-- For de nørdede: Har man både kontinuerte og diskrete indikatorvariable, så kan man også nemt håndtere det.
-I så fald snakker man om polyserielle korrelationer
-
---
-
-- I praksis er forskellen bare, at PCA'en vil køre en normal PCA på en korrelationsmatrice med *polykoriske korrelationer. *
+- Proceduren i skalakonstruktion er ofte, at man først bruger PCA/CFM for at identificere de items, der korrelerer med en given faktor.
 
 --
 
+- Dernæst kan man forsøge at danne et simpelt sumindeks, der giver lige vægt til alle items.
 
-**OBS! Man skal ikke gøre dette til eksamen**, men det er vigtigt at vide, at polykoriske korrelationer i princippet er ”mere rigtigt”. I praksis er forskellen bare, at PCA'en vil køre en normal PCA på en korrelationsmatrice med *polykoriske korrelationer. *
 
---
+`$$S = I_i + I_2+I_3+I_4+I_5$$`
+Fordelen er, at det er simpelt.
+---
+# Chronbachs alpha
+.pull-left[
 
-*Hvis man har lyst til at prøve kræfter med en polykorisk PCA ligger der en øvelse med en egnet R-pakke på absalon*
+Når man bygger skalaer ved at lægge variable sammen er det en god idé at sikre sig, at de variable, som man lægger sammen også måler det samme. 
+
+Til det bruger man ofte **chronbachs alpha!**
+]
+.pull-right[
+![](data:image/png;base64,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)
+]
+
+Chronbachs alpha er et mål man bruger til at vurdere en sumskalas såkaldte interne reliabilitet, dvs. et mål for, hvor meget målefejl, der er i ens skala. 
+
+(Pett et al. 2003:185ff)
 
 ---
 # Chronbachs alpha
 
-Chronbachs alpha er et mål man bruger til at vurdere en sumskalas såkaldte interne reliabilitet, dvs. et mål for, hvor meget målefejl, der er i ens skala.
 
 Alfa måler ikke dimensionalitet eller validitet, men reliabilitet, forudsat at der er én dimension i items.
 
 
+- *Reliabilitet* kan oversættes med pålidelighed eller konsistens, og henviser til målingens nøjagtighed
+
+- *Validitet (målevalitet)* betegner i hvor høj en grad, om vi måler det koncept, som vi ønsker at måle
+
+*(Kilde: Metodeguiden, Aarhus Universitet)*
+
+
 
 ---
 # Chronbachs alpha
+
+Chronbachs alpha værdien repræsenterer andelen af total varians i en skala, som kan tilskrives en fælles kilde og returnerer en værdi mellem 0 og 1 (for matematiske defintioner se Pett et. al 2003:187ff)
+
+
+Den kan bl.a. estimeres med **`alpha()`** funktionen fra *Psych*.
+
 
 ```r
 (ESS_DK %&gt;% 
     dplyr::select(parliament, legal_system, police, politicians, 
                   parties) %&gt;% 
-    cronbach.alpha())
+    alpha())
 ```
+---
+# Chronbachs alpha
 
-```
-## 
-## Cronbach's alpha for the '.' data-set
-## 
-## Items: 5
-## Sample units: 1593
-## alpha: 0.859
-```
+![](Alpha_output.png)
+---
+# Chronbachs alpha
+Funktionen returnerer altså grundlæggende to interessante ting: 
+
+
 .pull-left[
-Vi fortolker alpha-værdien ud fra følgende:
+
+**1)** En overordnet alpha-værdi, der giver jer et samlet mål for skalaens reliabilitet (0.86)
+
+**2)** Alpha-værdier for relabiliteten, hvis man fjerner et item af gangen
+
+Dvs. I får et overordnet mål, og mulighed for at spotte, om der er enkelte svage items, som med fordel kan fjernes fra skalaen. 
+
 ]
+
 .pull-right[
-&lt;img src="Chronbach_alpha.jpg" width="75%" /&gt;
+Man vurderer typisk reliabiliteten ud fra følgende grænseværdier:
+
+&lt;img src="Alpha_grænser.png" width="50%" /&gt;
+
+.backgrnote[Source: ["Statistics how to" ](https://www.statisticshowto.com/probability-and-statistics/statistics-definitions/cronbachs-alpha-spss/)]
 ]
+
+--
+
+OBS! Cronbachs alfa har en kritisk egenskab: Jo flere items, des større reliabilitet. 
+Dvs. man kan blæse alfa op ved at fylde (unødvendige) items på.
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
