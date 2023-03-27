@@ -198,12 +198,12 @@ En skala er normalt defineret ved at være en (vægtet) sum af variable, der må
 
 --
 
-Det første vi kunne gøre var at kombinere de fem spørgsmål til en simpel sumskala:
+Forestil jer, at vi har fem spørgsmål fra en survey på de danske gymnasier, der spørger ind til trivsel. Det første vi kunne gøre var at kombinere de fem spørgsmål til en simpel sumskala:
 
 $$S = I_i + I_2+I_3+I_4+I_5$$
 --
 
-Her antager vi, at hver variabel bidrager lige meget til det underliggende fænomen, som vi forsøger at måle.
+Her antager vi, at hver variabel bidrager lige meget til det underliggende fænomen, som vi forsøger at måle (trivsel).
 ---
 # Skalakonstruktion
 

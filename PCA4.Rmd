@@ -62,6 +62,8 @@ Videregående PCA
 
 - Chronbachs alpha
 
+- Kort om CFA
+
 Workshop med eksamensdata (fra kl. 15)
 
 ---
@@ -162,18 +164,18 @@ Det metodiske princip i PCA er følgende:
 
 --
 
-**4)** Beslut hvor mange komponenter, det er meningsfuldt at beholde (vi vil jo gerne nedbringe antallet af variable til nogle få, der opsummerer de gamle)
+**4)** Beslut hvor mange komponenter, det er meningsfuldt at beholde (vi vil jo gerne nedbringe antallet af variable til nogle få, der opsummerer de gamle) 
 
 --
 
-**5)** Udregn og rotér factor loadings for at fortolke indholdet i komponenterne (vælg enten orthogonal eller obliqe ud fra en teoretisk vurdering af, om i forventer at komponenterne vil korrelere) 
+**5)** Udregn og rotér factor loadings for at fortolke indholdet i komponenterne (vælg enten orthogonal eller obliqe ud fra en teoretisk vurdering af, om I forventer at komponenterne vil korrelere) 
 
 --
 
 **6)** Udtræk jeres nye variable (ved at udregne factor scores) og brug dem i analyser
 
 ---
-# PCA How to
+# PCA how to
 
 **1) Teori og variabeludvælgelse**
 
@@ -187,7 +189,7 @@ Udvælg indikatorer, som man med rimelighed vil forvente måler det, I gerne vil
 Fx institutionel tillid – gennem indikatorer på holdningen til forskellige nationale og overnationale institutioner.
 
 ---
-# PCA How to
+# PCA how to
 
 **2) Identificer antallet af komponenter**
 
@@ -210,40 +212,55 @@ Parallelanalysen er standard i dag!
 
 Samlet forklaringskraft: hvor meget forklarer antallet af fastholdte komponenter alt i alt?
 
+--
+
 - Ofte vil en god PCA være kendetegnet ved, at de fastholdte komponenter forklarer en betydelig del af den samlede variation.
 
+
+
 - Man kan arbejde med tommelfingerregler her (se f.eks. Hansen 2017), men det kan variere meget.
+
+
 
 - Vores råd er, at man altid angiver i en analyse, hvor meget antallet af fastholdte komponenter forklarer alt i alt. Det giver læser en ide om, hvor stærk ”PCA-løsningen” er.
 
 
 ---
-# PCA How to 
+# PCA how to
 **3) Fortolkning af komponenter**
 
 Vi fortolker vores komponenter med udgangspunkt i *factor loadings*. Definition: En factor loading er korrelationen mellem en komponent og en indikatorvariabel.
 
+--
+
 - Formål: Factor loadings fastlægger fortolkningen af en komponent!
 
-- Factor loadings svarer til de betingede sandsynligheder i LCA (rho)…
+
+
+- Factor loadings svarer til de betingede sandsynligheder i LCA (rho-parametre)
+
+
 
 - Det anbefales, at man ikke fortolker på de rå factor loadings!
 Fortolkning af komponenter afhjælpes derimod i PCA af såkaldt ***rotation*** af de komponenter som man beholder.
 
-- Rotation + regler for simpel struktur afgør, hvordan PCA’ens resultater fortolkes…
-
 
 ---
-# PCA How to 
+# PCA how to
 
 **3) Fortolkning af komponenter - rotationsmetoder**
 
 Formålet med rotation af faktorer er at opnå fortolkelige faktorer/komponenter, dvs. faktorer, hvor factor loadings relativt entydigt hjælper med at beskrive de latente variable.
 
+--
+
 - Det handler om at opnå simple structure (Se Pett et al., s. 132ff).
+
+
 
 - Det minder meget om principperne for klassehomogenitet og -separation i LCA.
 
+--
 
 Der findes mange rotationsmetoder, der hver især forsøger at opnå simple structure ud fra lidt forskellige kriterier. Den vigtige distinktion her er mellem ortogonale og oblique rotationer: 
 
@@ -253,7 +270,7 @@ Der findes mange rotationsmetoder, der hver især forsøger at opnå simple stru
 
 
 ---
-# PCA How to
+# PCA how to
 
 **3) Fortolkning af komponenter - rotationsmetoder**
 
@@ -263,6 +280,7 @@ Ved oblique rotation skelner man mellem:
 
 - Factor structure matrix: De rå korrelationer mellem den roterede komponent/faktor og de manifeste variable. De er ubetingede factor loadings.
 
+--
 
 Hvilken matrix bruger man så til at fortolke sine resultater med?
 De facto standarden er at bruge factor structure matrix, da det minder om factor loadings i ortogonal rotation.
@@ -270,7 +288,7 @@ De facto standarden er at bruge factor structure matrix, da det minder om factor
 Personligt er vi dog tilbøjelige til at sige, at begge er vigtige og siger noget forskelligt, men så på den anden side viser litteraturen, at de ofte giver samme resultat anyways...
 
 ---
-# PCA How to
+# PCA how to
 
 **4) Forudsagte factor scores**
 
@@ -310,7 +328,7 @@ knitr::include_graphics('Nice_to_know.jpg')
 ```
 ]
 ---
-# Polychorisk PCA
+# Polykorisk PCA
 
 Polykorisk PCA er en udvidelse (eller måske rettere en *specificering*) af PCA, som I kender den. 
 
@@ -352,11 +370,12 @@ knitr::include_graphics('Likert_scale.png')
 
 --
 
-- Det gør man ved at modellere de dikotome eller ordinalt skalerede variable som funktioner af latente kontinuerte variable. 
+- Disse korrelationskoeficienter modellerer de dikotome eller ordinalt skalerede variable som funktioner af latente kontinuerte variable. 
 
+*(Hansen 2017:281)*
 
 ---
-# Polychorisk PCA
+# Polykorisk PCA
 
 - For de nørdede: Har man både kontinuerte og diskrete indikatorvariable, så kan man også nemt håndtere det.
 I så fald snakker man om polyserielle korrelationer
@@ -370,9 +389,6 @@ I så fald snakker man om polyserielle korrelationer
 
 **OBS! Man skal ikke gøre dette til eksamen**, men det er vigtigt at vide, at polykoriske korrelationer i princippet er ”mere rigtigt”. 
 
---
-
-I praksis er forskellen bare, at PCA'en vil køre en normal PCA på en korrelationsmatrice med *polykoriske/tetrakoriske/polyserielle korrelationer.*
 
 --
 
@@ -387,11 +403,11 @@ I PCA har vi udledt komponenter (*principal components*), men det er vigtigt at 
 --
 
 
-- **Komponenter** er simple lineære kombinationer af variable, det Kline (1994) kalder "real factors"
+- **Komponenter** er simple lineære kombinationer af variable, det Kline (1994) kalder "real factors" (PCA)
 
 --
 
-- **Faktorer** er hypotetiske konstrukter, som vi forsøger at estimere (CFM) ved brug af manifeste variable
+- **Faktorer** er hypotetiske konstrukter, som vi forsøger at estimere ved brug af manifeste variable (CFM)
 
 
 Pett et al. + Hansen (2017) og Kline (1994) laver denne skelnen. I praksis er CFM dog bare PCA med et lille tvist...
@@ -442,7 +458,7 @@ PCA og CFM adskiller sig i forhold til, hvordan de forholder sig til *specific-*
 # Common factor model
 
 
-PCA inkluderer alle tre typer af varians, når den udtrækker komponenter. Derfor har vi også set, at de komponenter vi udtrækker forklarer 100 % variationen i korrelationsmatricen!
+PCA inkluderer alle tre typer af varians, når den udtrækker komponenter. Derfor har vi også set, at de komponenter vi udtrækker forklarer 100 % af variationen i korrelationsmatricen!
 
 Den korrelationsmatricen som vi har kørt PCA på har derfor også har 1 i diagonalen:
 
@@ -492,7 +508,7 @@ Pett et al. (2003) beskriver, at en ulempe ved PCA netop er, at den ikke tager h
 ***Common factor model*** referer til den klasse af EFA, som arbejder med faktorer.
 
 
-- Den centrale forskel på CFM og PCA er, at CFM antager, at de latente faktorer ikke kan forklare al variation i korrelationsmatricen. Det virker jo yderst rimelig!
+- Den centrale forskel på CFM og PCA er, at CFM antager, at de latente faktorer ikke kan forklare al variation i korrelationsmatricen. Det virker jo yderst rimeligt!
 
 - Derfor prøver CFM-modeller eksplicit at korrigere for dette ved at adskille common og unique variance
 
@@ -502,7 +518,7 @@ Faktorer er derfor ikke bare lineære kombinationer af items i korrelationsmatri
 
 --
 
-Fordi CFM fokuserer på common variance vil de faktorer man udtrækker ikke forklare 100 % af variansen i korrelationsmatricen. 
+Fordi CFM fokuserer på common variance vil de faktorer man udtrækker ikke forklarer 100 % af variansen i korrelationsmatricen. 
 
 --
 
@@ -573,7 +589,7 @@ knitr::include_graphics('https://vitalflux.com/wp-content/uploads/2019/07/R-squa
 
 --
 
-Selvom der i praksis ofte ikke er den store forskel, er det vigtigt at I forstår skelnen mellem komponenter og faktorer. De to ting bygger på forskellige antagelser, og er principielt set ikke det samme. 
+Selvom der i praksis ofte ikke er den store forskel, er det vigtigt at I forstår skelnen mellem komponenter og faktorer. De to ting bygger på forskellige antagelser og er principielt set ikke det samme. 
 
 $$ Components \neq Factors$$
 
@@ -621,7 +637,7 @@ Til det bruger man ofte **chronbachs alpha!**
 
 Chronbachs alpha er et mål man bruger til at vurdere en sumskalas såkaldte interne reliabilitet, dvs. et mål for, hvor meget målefejl, der er i ens skala. 
 
-(Pett et al. 2003:185ff)
+*(Pett et al. 2003:185ff)*
 
 ---
 # Chronbachs alpha
@@ -686,4 +702,71 @@ knitr::include_graphics('Alpha_grænser.png')
 
 OBS! Cronbachs alfa har en kritisk egenskab: Jo flere items, des større reliabilitet. 
 Dvs. man kan blæse alfa op ved at fylde (unødvendige) items på.
+
+---
+# Confirmatorisk faktoranalyse (CFA)
+
+Hvis man er interesseret i at vurdere validiteten af en skala, kan man benytte *konfirmatorisk faktoranalyse*.
+
+CFA er den hypotesetestende udgave af FA. CFA bruges typisk til at validere skalaer med.
+Det handler altså om (konstrukt)validitet:
+
+- Måler vi det, vi tror vi måler? 
+
+- Måler vi det samme for forskellige undergrupper? (Test bias, item bias, differential item functioning).
+Vigtige spørgsmål!
+
+
+Den kan f.eks. bruge til at teste om psykometriske måleinstrumenter er robuste i forskellige befolkningsgrupper eller teste den faktorstruktur, som man har identificeret i EFA.
+
+---
+# Confirmatorisk faktoranalyse (CFA)
+
+
+Kurset går ikke i dybden med denne type FA, da det er avanceret og brugen ligger på ydersiden af ”data-mining”.
+
+Se evt. Karlson og Jæger (2011) i Dansk Sociologi for et teoretisk informeret eksempel.
+
+--
+
+- Grundlæggende er CFA en statistisk teknik der bruges til at vurdere hypoteser omkring den underliggende struktur eller dimensioner bag en række variable. 
+
+--
+
+- Der tages udgangspunkt i en hypotese omkring den underliggende struktur blandt nogle manifeste variable, dvs. man har en statistisk model for, hvordan items er forårsaget af latente variabler.
+
+--
+
+- Man tester derefter modellen ved at vurdere dens fit på data.
+
+--
+
+- Minder rigtig meget om LCA, bruges bare mere hypotesetestende.
+
+---
+# Confirmatorisk faktoranalyse (CFA)
+
+CFA tager målemodellen seriøst: Den estimerer den!
+
+.center[
+```{r, out.width = "65%", echo=FALSE}
+knitr::include_graphics("Målemodel_målefejl_1.png")
+```
+]
+
+
+---
+# Confirmatory factor analysis
+
+- CFA-modeller kan estimeres på flere måder, men normalt bruges maximum likelihood, dvs. præcis det samme som i LCA.
+
+- CFA-modeller giver også en række fit-index, som kan bruges til at vurdere, om en model fitter godt i både absolut og relativ forstand.
+
+- Brugen af CFA er faktisk relativt kompliceret, da det kræver at man har et kendskab til identifikation af disse modeller.
+
+Det ligger ud over dette kursus, men er vigtig at være opmærksom på, inden man selv bevæger sig ud i et CFA-eventyr.
+
+
+*Se evt. Harrington…*
+
 
